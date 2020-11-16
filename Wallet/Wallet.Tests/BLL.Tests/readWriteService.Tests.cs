@@ -1,25 +1,22 @@
-﻿using DAL;
-using DAL.Provider;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Xunit;
+using Moq;
+using DAL;
+using BLL;
 
-namespace Wallet.Tests.DAL.Tests
+namespace Wallet.Tests.BLL.Tests
 {
-    public class provider_Tests
+    public class readWriteService
     {
-        XmlProvider<Bill> provider = new XmlProvider<Bill>();
-        string connection = "test.xml";
-
         [Fact]
-        public void XmlProvider_Write_Read_Successfully()
+        public void ReadData_Success()
         {
-            List<Bill> expected = GetList();
+            var mock = new Mock<IBillContext>();
+            mock.Setup(x => x.GetData()).Returns(GetList());
+            var readWriteService = new ReadWriteService(mock.Object);
 
-            provider.Write(expected, connection);
-
-            var actual = provider.Read(connection);
+            var expected = GetList();
+            var actual = readWriteService.ReadData();
 
             Assert.True(actual != null);
             Assert.Equal(expected.Count, actual.Count);
@@ -30,14 +27,18 @@ namespace Wallet.Tests.DAL.Tests
                 Assert.Equal(expected[i].Money, actual[i].Money);
             }
         }
+
         [Fact]
-        public void XmlProvider_CatchException_Read()
+        public void WriteData_Success()
         {
-            string corruptedConnection = "corrupted.xml"; 
+            List<Bill> data = GetList(); 
+            var mock = new Mock<IBillContext>();
+            mock.Setup(x => x.SetData(data)).Verifiable();
+            var readWriteService = new ReadWriteService(mock.Object);
 
-            List<Bill> data = GetList();
+            readWriteService.WriteData(data);
 
-            Assert.Throws<InvalidOperationException>(() => provider.Read(corruptedConnection));
+            mock.Verify(x => x.SetData(data), Times.Once);
         }
 
         public List<Bill> GetList()
@@ -47,7 +48,7 @@ namespace Wallet.Tests.DAL.Tests
             profits.Add(profit);
             MoneyExpense expense = new MoneyExpense("relaxed", 300);
             List<MoneyExpense> expenses = new List<MoneyExpense>();
-            expenses.Add(expense); 
+            expenses.Add(expense);
 
             Category category = new Category("work");
             List<Category> categories = new List<Category>();

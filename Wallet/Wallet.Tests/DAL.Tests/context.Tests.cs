@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Xunit;
 using Moq;
 using DAL;
 using DAL.Provider; 
-using Autofac.Extras.Moq;
 
 namespace Wallet.Tests.DAL.Tests
 {
@@ -18,6 +15,7 @@ namespace Wallet.Tests.DAL.Tests
         {
             var mock = new Mock<IProvider<Bill>>();
             mock.Setup(x => x.Read(conn)).Returns(GetList());
+
             var context = new BillContext(mock.Object, conn);
 
             var expected = GetList();
@@ -37,6 +35,7 @@ namespace Wallet.Tests.DAL.Tests
         public void GetData_ProviderNull()
         {
             IProvider<Bill> provider = null;
+
             var context = new BillContext(provider, conn);
 
             Assert.Throws<ProviderException>(() => context.GetData()); 
@@ -66,6 +65,7 @@ namespace Wallet.Tests.DAL.Tests
         public void SetData_ProviderNull()
         {
             IProvider<Bill> provider = null;
+
             var context = new BillContext(provider, conn);
 
             Assert.Throws<ProviderException>(() => context.SetData(GetList()));

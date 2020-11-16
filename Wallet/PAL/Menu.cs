@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using BLL;
 
 namespace PL
 {
@@ -19,21 +20,26 @@ namespace PL
                 //UpdateMenu(); 
                 Console.WriteLine(_menuEntry);
                 string func = Console.ReadLine(); 
-                switch (func.ToLower())
+                if(func.ToLower().Equals("exit"))
                 {
-                    case "profit": 
-
-                    case "exit":
-                        exit = true;
-                        break;
-                    default:
-                        Console.WriteLine("Enter legit thing");
-                        break; 
+                    exit = true; 
+                }
+                else
+                {
+                    if(func.ToLower().Equals("add"))
+                    {
+                        Add(); 
+                    }
                 }
             }
          }
 
-        private string _menuEntry { get; } = "What do you want to do?\nAdd profit\nAdd expense\nGenerate data info"; 
+        private string _menuEntry { get; } = "What do you want to do?\nAdd new money event\nChange info\nGenerate data info"; 
 
+        private void Add()
+        {
+            Console.WriteLine("Select bill");
+            
+        }
     }
 }

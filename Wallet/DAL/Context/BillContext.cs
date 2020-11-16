@@ -4,7 +4,7 @@ using System.Text;
 using DAL.Provider;
 namespace DAL
 {
-    public class BillContext
+    public class BillContext : IBillContext
     {
         private List<Bill> _storedData;
 

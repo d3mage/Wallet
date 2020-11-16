@@ -9,7 +9,7 @@ namespace DAL
     {
         public string Description { get; set; }
         public double Value { get; set; }
-        public DateTime Date { get; }
+        public DateTime Date { get; set; }
 
         public MoneyEvent() { }
         public MoneyEvent(string description, double value)
