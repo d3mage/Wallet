@@ -12,7 +12,7 @@ namespace BLL
             List<Bill> data = service.ReadData();
             foreach (var d in data)
             {
-                if (d.Name.Equals(name)) return false;
+                if (d.Name.ToLower().Equals(name)) return false;
             }
             return true;
         }
@@ -22,7 +22,7 @@ namespace BLL
             List<Bill> data = service.ReadData();
             foreach (var d in data) 
             {
-                if (d.Name.Equals(name)) return d; 
+                if (d.Name.ToLower().Equals(name)) return d; 
             }
             throw new ArgumentException("Bill name is invalid.");
         }
@@ -34,28 +34,35 @@ namespace BLL
             service.WriteData(data);
         }
       
-        public void Delete(IReadWriteService service, string name)
+        public void DeleteBill(IReadWriteService service, Bill bill)
         {
             List<Bill> data = service.ReadData();
-            foreach(var d in data)
-            {
-                if(d.Name.Equals(name))
-                {
-                    data.Remove(d); 
-                }
-            }
+            data.Remove(bill);
             service.WriteData(data); 
         }
 
         
-        public void ChangeInfo()
+        public void ChangeBillInfo(IReadWriteService service, string oldName, string newName)
         {
-
+            List<Bill> data = service.ReadData();
+            foreach (var d in data)
+            {
+                if (d.Name.ToLower().Equals(oldName))
+                {
+                    d.Name = newName;
+                }
+            }
+            service.WriteData(data);
         }
 
-        public void ShowAll()
+        public List<Bill> GetBills(IReadWriteService service)
         {
-
+            List<Bill> data = service.ReadData();
+            if (data.Count > 0)
+            {
+                return data;
+            }
+            else throw new BillsNotInitializedException(); 
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using PL; 
 
 namespace Wallet
@@ -7,7 +8,7 @@ namespace Wallet
     {
         static void Main(string[] args)
         {
-            Menu menu = new Menu();
+            
         }
     }
 }

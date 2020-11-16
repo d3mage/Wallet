@@ -7,8 +7,10 @@ namespace PL
 {
     public class Menu
     {
-       public  Menu()
+       private BillService service; 
+       public Menu()
         {
+            service = new BillService(); 
             Print();
         }
 
@@ -17,7 +19,6 @@ namespace PL
             bool exit = false; 
             while(exit != true)
             {
-                //UpdateMenu(); 
                 Console.WriteLine(_menuEntry);
                 string func = Console.ReadLine(); 
                 if(func.ToLower().Equals("exit"))
@@ -38,7 +39,6 @@ namespace PL
 
         private void Add()
         {
-            Console.WriteLine("Select bill");
             
         }
     }

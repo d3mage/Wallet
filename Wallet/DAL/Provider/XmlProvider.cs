@@ -10,17 +10,15 @@ namespace DAL.Provider
     {
         public void Write(List<Bill> data, string connection)
         {
-            using (FileStream fs = new FileStream(connection, FileMode.OpenOrCreate))
+            using FileStream fs = new FileStream(connection, FileMode.OpenOrCreate);
+            XmlSerializer formatter = new XmlSerializer(data.GetType());
+            try
             {
-                XmlSerializer formatter = new XmlSerializer(data.GetType());
-                try
-                {
-                    formatter.Serialize(fs, data);
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                formatter.Serialize(fs, data);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
