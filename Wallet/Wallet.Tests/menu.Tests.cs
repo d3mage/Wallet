@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
+using Xunit.Abstractions; 
 
 namespace Wallet.Tests
 {
@@ -10,7 +11,7 @@ namespace Wallet.Tests
         [Fact]
         public void MenuEntry_IsValid()
         {
-
+            
         }
     }
 }

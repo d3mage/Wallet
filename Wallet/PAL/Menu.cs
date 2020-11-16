@@ -6,13 +6,28 @@ namespace PL
 {
     public class Menu
     {
-        void Print()
+        Menu()
+        {
+            Print();
+        }
+
+        public void Print()
         {
             bool exit = false; 
             while(exit != true)
             {
                 //UpdateMenu(); 
                 Console.WriteLine(_menuEntry);
+                string func = Console.ReadLine(); 
+                switch (func.ToLower())
+                {
+                    case "exit":
+                        exit = false;
+                        break;
+                    default:
+                        Console.WriteLine("Enter legit thing");
+                        break; 
+                }
             }
          }
 

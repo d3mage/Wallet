@@ -38,7 +38,17 @@ namespace DAL
                     return _storedData;
                 }
             }
-            else throw new InvalidOperationException("Data provider is unavailable");
+            else throw new ProviderException(); 
+        }
+
+        public void SetData(List<Bill> data)
+        {
+            if (DataProvider != null)
+            {
+                DataProvider.Write(data, ConnectionString);
+                _storedData = data;
+            }
+            else throw new ProviderException();
         }
     }
 }
