@@ -6,7 +6,7 @@ namespace PL
 {
     public class Menu
     {
-        Menu()
+       public  Menu()
         {
             Print();
         }
@@ -21,8 +21,10 @@ namespace PL
                 string func = Console.ReadLine(); 
                 switch (func.ToLower())
                 {
+                    case "profit": 
+
                     case "exit":
-                        exit = false;
+                        exit = true;
                         break;
                     default:
                         Console.WriteLine("Enter legit thing");
@@ -31,7 +33,7 @@ namespace PL
             }
          }
 
-        private string _menuEntry { get; } = "Current "; 
+        private string _menuEntry { get; } = "What do you want to do?\nAdd profit\nAdd expense\nGenerate data info"; 
 
     }
 }

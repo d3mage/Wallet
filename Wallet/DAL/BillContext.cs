@@ -4,9 +4,9 @@ using System.Text;
 using DAL.Provider;
 namespace DAL
 {
-    class BillContext
+    public class BillContext
     {
-        private List<Bill> _storedData; 
+        private List<Bill> _storedData;
 
         public string ConnectionString { get; }
         public IProvider<Bill> DataProvider { get; set; }

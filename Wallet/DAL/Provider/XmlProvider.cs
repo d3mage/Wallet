@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 
 namespace DAL.Provider
 {
-    public class XmlProvider<Bill> /*: IProvider<Bill>*/
+    public class XmlProvider<Bill> : IProvider<Bill>
     {
         public void Write(List<Bill> data, string connection)
         {
@@ -24,9 +24,22 @@ namespace DAL.Provider
             }
         }
 
-        //public List<Bill> Read(string connection)
-        //{
-            
-        //}
+       public List<Bill> Read(string connection)
+        {
+            List<Bill> data;
+            using (FileStream fs = new FileStream(connection, FileMode.OpenOrCreate))
+            {
+                XmlSerializer formatter = new XmlSerializer(typeof(List<Bill>));
+                try
+                {
+                    data = (List<Bill>)formatter.Deserialize(fs);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    throw ex;
+                }
+            }
+            return data;
+        }
     }
 }

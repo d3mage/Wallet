@@ -8,7 +8,7 @@ namespace DAL
     public class Bill
     {
         public string Name { get; set; }
-        public double Money { get; }
+        public double Money { get; set; }
         public List<Category> categories { get; set; }
 
         public Bill() { }
