@@ -6,7 +6,6 @@ namespace DAL
 {
     public class ProviderException : Exception
     {
-        public string msg;
-        public ProviderException() : base() { msg = "Provider is null."; }
+        public override string Message => "Provider is null.";
     }
 }

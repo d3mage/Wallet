@@ -6,6 +6,6 @@ namespace BLL
 {
     public class TooManyFalseAttemptsException : Exception
     {
-        public string msg = "You've failed to enter correct data 3 times. Pathetic."; 
+        public override string Message => "You've failed to enter correct data 3 times. Pathetic.";
     }
 }

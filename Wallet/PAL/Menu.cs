@@ -7,21 +7,23 @@ namespace PL
 {
     public class Menu
     {
-        private string _menuEntry  = "What do you want to do?\nAdd new money event\nChange info\nGenerate data info";
+        private string _menuEntry  = "What do you want to do?\nAdd\nDelete\nChange info\nGenerate data stats";
 
-        IGetInputService getInputService; 
+        IGetInputService getInputService;
+        ISecondaryMenu secondaryMenu;
 
-       public Menu(IGetInputService getInput)
+       public Menu(IGetInputService getInput, ISecondaryMenu secondary)
         {
-            getInputService = getInput; 
+            getInputService = getInput;
+            secondaryMenu = secondary; 
         }
 
-        public void Print()
+        public int Print()
         {
-            bool exit = false; 
-            while(exit != true)
+            string func = "";
+           
+            while(!func.Equals("exit"))
             {
-                string func = "";
                 Console.WriteLine(_menuEntry);
                 try
                 {
@@ -31,26 +33,18 @@ namespace PL
                 {
                     Console.WriteLine(e.msg);
                 }
-
-                if (func.Equals("exit"))
+                if (func.Equals("add"))
                 {
-                    exit = true; 
+                    secondaryMenu.Add(getInputService);
+                    break; 
                 }
-                else
+                else if(func.Equals("delete"))
                 {
-                    if(func.Equals("add"))
-                    {
 
-                    }
                 }
             }
-            return;
+            return 1;
          }
 
-
-        public void Add()
-        {
-
-        }
     }
 }

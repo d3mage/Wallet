@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using DAL.Provider;
+
 namespace DAL
 {
     public class BillContext : IBillContext
@@ -33,7 +33,7 @@ namespace DAL
                     }
                     catch (Exception ex)
                     {
-                        throw ex;
+                        throw new EmptyListException(); 
                     }
                     return _storedData;
                 }

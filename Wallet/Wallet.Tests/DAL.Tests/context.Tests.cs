@@ -2,7 +2,8 @@
 using Xunit;
 using Moq;
 using DAL;
-using DAL.Provider; 
+using DAL.Provider;
+using System;
 
 namespace Wallet.Tests.DAL.Tests
 {
@@ -39,6 +40,17 @@ namespace Wallet.Tests.DAL.Tests
             var context = new BillContext(provider, conn);
 
             Assert.Throws<ProviderException>(() => context.GetData()); 
+        }
+
+        [Fact]
+        public void GetData_ReadingException()
+        {
+            var mock = new Mock<IProvider<Bill>>();
+            mock.Setup(x => x.Read(conn)).Throws<Exception>();
+
+            var context = new BillContext(mock.Object, conn);
+
+            Assert.Throws<EmptyListException>(() => context.GetData());
         }
 
         [Fact]

@@ -9,6 +9,19 @@ namespace Wallet.Tests.BLL.Tests
 {
     public class BillService_Tests
     {
+        [Fact]
+        public void isBillNameAvailable_Break()
+        {
+            List<Bill> data = GetList();
+
+            var mock = new Mock<IReadWriteService>();
+            mock.Setup(x => x.ReadData()).Throws<EmptyListException>(); 
+
+            BillService service = new BillService();
+
+            Assert.Throws<EmptyListException>(() => service.isBillNameAvailable(mock.Object, "name"));
+        }
+
         [Theory]
         [InlineData("work bill", false)]
         [InlineData("new bill", true)]
