@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using PL; 
+using PL;
+using BLL;
 
 namespace Wallet
 {

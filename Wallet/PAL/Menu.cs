@@ -7,11 +7,13 @@ namespace PL
 {
     public class Menu
     {
-       private BillService service; 
-       public Menu()
+        private string _menuEntry  = "What do you want to do?\nAdd new money event\nChange info\nGenerate data info";
+
+        IGetInputService getInputService; 
+
+       public Menu(IGetInputService getInput)
         {
-            service = new BillService(); 
-            Print();
+            getInputService = getInput; 
         }
 
         public void Print()
@@ -19,27 +21,36 @@ namespace PL
             bool exit = false; 
             while(exit != true)
             {
+                string func = "";
                 Console.WriteLine(_menuEntry);
-                string func = Console.ReadLine(); 
-                if(func.ToLower().Equals("exit"))
+                try
+                {
+                    func = getInputService.GetVerifiedInput(@"[A-Za-z]{3,10}");
+                }
+                catch (TooManyFalseAttemptsException e)
+                {
+                    Console.WriteLine(e.msg);
+                }
+
+                if (func.Equals("exit"))
                 {
                     exit = true; 
                 }
                 else
                 {
-                    if(func.ToLower().Equals("add"))
+                    if(func.Equals("add"))
                     {
-                        Add(); 
+
                     }
                 }
             }
+            return;
          }
 
-        private string _menuEntry { get; } = "What do you want to do?\nAdd new money event\nChange info\nGenerate data info"; 
 
-        private void Add()
+        public void Add()
         {
-            
+
         }
     }
 }

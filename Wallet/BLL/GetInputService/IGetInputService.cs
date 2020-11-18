@@ -4,8 +4,8 @@ using System.Text;
 
 namespace BLL
 {
-    public class InputVerificationService
+    public interface IGetInputService
     {
-
+        public string GetVerifiedInput(string pattern); 
     }
 }
