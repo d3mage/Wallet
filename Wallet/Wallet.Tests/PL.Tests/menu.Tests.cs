@@ -9,8 +9,6 @@ namespace Wallet.Tests.PAL.Tests
 {
     public class menu_Tests
     {
-        private string _menuEntry = "What do you want to do?\nAdd new money event\nChange info\nGenerate data info";
-
         [Fact]
        public void MenuCall_Exit()
         {
@@ -22,21 +20,23 @@ namespace Wallet.Tests.PAL.Tests
 
             Assert.Equal(1, actual);
         }
-       
+        
         [Fact]
         public void MenuCall_CallsSecondaryMenyAdd()
         {
             var inputMock = new Mock<IGetInputService>();
-            inputMock.Setup(x => x.GetVerifiedInput(@"[A-Za-z]{3,10}")).Returns("add");
+            inputMock.SetupSequence(x => x.GetVerifiedInput(@"[A-Za-z]{3,10}"))
+                .Returns("add")
+                .Returns("bill");
 
-            var secondaryMenuMock = new Mock<ISecondaryMenu>();
-            secondaryMenuMock.Setup(x => x.Add(inputMock.Object)); 
+            var handlerMock = new Mock<IBusinessHandler>();
+            handlerMock.Setup(x => x.AddBill()); 
 
-            Menu menu = new Menu(inputMock.Object, secondaryMenuMock.Object);
+            Menu menu = new Menu(inputMock.Object, handlerMock.Object);
 
             menu.Print();
 
-            secondaryMenuMock.Verify(x => x.Add(inputMock.Object), Times.Once); 
+            handlerMock.Verify(x => x.AddBill(), Times.Once); 
         }
     }
 }

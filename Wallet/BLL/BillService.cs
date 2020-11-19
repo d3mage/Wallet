@@ -5,11 +5,25 @@ using DAL;
 
 namespace BLL
 {
-    public class BillService
+    public class BillService : IBillService
     {
-        public bool isBillNameAvailable(IReadWriteService service, string name)
+        public IReadWriteService readWriteService; 
+        public BillService(IReadWriteService readWrite)
         {
-            List<Bill> data = service.ReadData();
+            readWriteService = readWrite; 
+        }
+
+        public bool isBillNameAvailable(string name)
+        {
+            List<Bill> data;
+            try
+            {
+                data = readWriteService.ReadData();
+            }
+            catch (EmptyListException e)
+            {
+                return true; 
+            }
             foreach (var d in data)
             {
                 if (d.Name.ToLower().Equals(name)) return false;
@@ -17,34 +31,47 @@ namespace BLL
             return true;
         }
 
-        public Bill GetBillByName(IReadWriteService service, string name)
+        public Bill GetBillByName(string name)
         {
-            List<Bill> data = service.ReadData();
+            List<Bill> data = readWriteService.ReadData();
             foreach (var d in data) 
             {
                 if (d.Name.ToLower().Equals(name)) return d; 
             }
-            throw new ArgumentException("Bill name is invalid.");
+            throw new BillNameInvalidException();
         }
 
-        public void AddBill(IReadWriteService service, Bill bill)
+        public Bill CreateNewBill(string name, double money)
         {
-            List<Bill> data = service.ReadData();
+            return new Bill(name, money); 
+        }
+
+        public void AddBill(Bill bill)
+        {
+            List<Bill> data;
+            try
+            {
+                data = readWriteService.ReadData();
+            }
+            catch (EmptyListException e)
+            {
+                data = new List<Bill>(); 
+            }
             data.Add(bill);
-            service.WriteData(data);
+            readWriteService.WriteData(data);
         }
       
-        public void DeleteBill(IReadWriteService service, Bill bill)
+        public void DeleteBill(Bill bill)
         {
-            List<Bill> data = service.ReadData();
+            List<Bill> data = readWriteService.ReadData();
             data.Remove(bill);
-            service.WriteData(data); 
+            readWriteService.WriteData(data); 
         }
 
         
-        public void ChangeBillInfo(IReadWriteService service, string oldName, string newName)
+        public void ChangeBillInfo(string oldName, string newName)
         {
-            List<Bill> data = service.ReadData();
+            List<Bill> data = readWriteService.ReadData();
             foreach (var d in data)
             {
                 if (d.Name.ToLower().Equals(oldName))
@@ -52,12 +79,12 @@ namespace BLL
                     d.Name = newName;
                 }
             }
-            service.WriteData(data);
+            readWriteService.WriteData(data);
         }
 
-        public List<Bill> GetBills(IReadWriteService service)
+        public List<Bill> GetBills()
         {
-            List<Bill> data = service.ReadData();
+            List<Bill> data = readWriteService.ReadData();
             if (data.Count > 0)
             {
                 return data;

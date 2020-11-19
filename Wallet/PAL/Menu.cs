@@ -7,15 +7,13 @@ namespace PL
 {
     public class Menu
     {
-        private string _menuEntry  = "What do you want to do?\nAdd\nDelete\nChange info\nGenerate data stats";
-
         IGetInputService getInputService;
-        ISecondaryMenu secondaryMenu;
+        IBusinessHandler businessHandler;
 
-       public Menu(IGetInputService getInput, ISecondaryMenu secondary)
+       public Menu(IGetInputService getInput, IBusinessHandler handler)
         {
+            businessHandler = handler; 
             getInputService = getInput;
-            secondaryMenu = secondary; 
         }
 
         public int Print()
@@ -31,11 +29,25 @@ namespace PL
                 }
                 catch (TooManyFalseAttemptsException e)
                 {
-                    Console.WriteLine(e.msg);
+                    Console.WriteLine(e.Message);
                 }
                 if (func.Equals("add"))
                 {
-                    secondaryMenu.Add(getInputService);
+                    Console.WriteLine(addMenu);
+                    try
+                    {
+                        func = getInputService.GetVerifiedInput(@"[A-Za-z]{3,10}");
+                    }
+                    catch (TooManyFalseAttemptsException e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    switch (func)
+                    {
+                        case "bill":
+                            businessHandler.AddBill(); 
+                            break;
+                    }
                     break; 
                 }
                 else if(func.Equals("delete"))
@@ -46,5 +58,8 @@ namespace PL
             return 1;
          }
 
+
+        private string _menuEntry  = "What do you want to do?\nAdd\nDelete\nChange info\nGenerate data stats";
+        private string addMenu = "What do you want to add?\nBill\nCategory\nProfit\nExpense";
     }
 }

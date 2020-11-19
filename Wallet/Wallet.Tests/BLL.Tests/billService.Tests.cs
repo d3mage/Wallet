@@ -17,9 +17,11 @@ namespace Wallet.Tests.BLL.Tests
             var mock = new Mock<IReadWriteService>();
             mock.Setup(x => x.ReadData()).Throws<EmptyListException>(); 
 
-            BillService service = new BillService();
+            BillService service = new BillService(mock.Object);
 
-            Assert.Throws<EmptyListException>(() => service.isBillNameAvailable(mock.Object, "name"));
+            bool actual = service.isBillNameAvailable("");
+
+            Assert.True(actual); 
         }
 
         [Theory]
@@ -32,9 +34,9 @@ namespace Wallet.Tests.BLL.Tests
             var mock = new Mock<IReadWriteService>();
             mock.Setup(x => x.ReadData()).Returns(data);
 
-            BillService service = new BillService();
+            BillService service = new BillService(mock.Object);
 
-            bool actual = service.isBillNameAvailable(mock.Object, name);
+            bool actual = service.isBillNameAvailable(name);
 
             Assert.Equal(expected, actual);
         }
@@ -48,9 +50,9 @@ namespace Wallet.Tests.BLL.Tests
             mock.Setup(x => x.ReadData()).Returns(data);
 
             Bill expected = new Bill("work bill", 800); 
-            BillService service = new BillService();
+            BillService service = new BillService(mock.Object);
 
-            Bill actual = service.GetBillByName(mock.Object, "work bill");
+            Bill actual = service.GetBillByName("work bill");
 
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.Money, actual.Money);
@@ -64,9 +66,9 @@ namespace Wallet.Tests.BLL.Tests
             var mock = new Mock<IReadWriteService>();
             mock.Setup(x => x.ReadData()).Returns(data);
 
-            BillService service = new BillService();
+            BillService service = new BillService(mock.Object);
 
-            Assert.Throws<ArgumentException>(() => service.GetBillByName(mock.Object, "test bill")); 
+            Assert.Throws<BillNameInvalidException>(() => service.GetBillByName("test bill")); 
         }
 
         [Fact]
@@ -79,9 +81,9 @@ namespace Wallet.Tests.BLL.Tests
             mock.Setup(x => x.WriteData(data)).Verifiable();
 
             Bill testBill = new Bill("work bill", 800);
-            BillService service = new BillService();
+            BillService service = new BillService(mock.Object);
 
-            service.AddBill(mock.Object, testBill);
+            service.AddBill(testBill);
 
             mock.Verify(x => x.WriteData(data), Times.Once);
             Assert.Contains(testBill, data); 
@@ -97,9 +99,9 @@ namespace Wallet.Tests.BLL.Tests
             mock.Setup(x => x.WriteData(data)).Verifiable();
 
             Bill testBill = new Bill("work bill", 800);
-            BillService service = new BillService();
+            BillService service = new BillService(mock.Object);
 
-            service.DeleteBill(mock.Object, testBill);
+            service.DeleteBill(testBill);
 
             mock.Verify(x => x.WriteData(data), Times.Once);
             Assert.DoesNotContain(testBill, data);
@@ -117,9 +119,9 @@ namespace Wallet.Tests.BLL.Tests
             mock.Setup(x => x.WriteData(data)).Verifiable();
 
             Bill testBill = new Bill("test bill", 800); 
-            BillService service = new BillService();
+            BillService service = new BillService(mock.Object);
 
-            service.ChangeBillInfo(mock.Object, "work bill", "test bill");
+            service.ChangeBillInfo("work bill", "test bill");
 
             mock.Verify(x => x.WriteData(data), Times.Once);
             Assert.Equal(expectedList[0].Name, data[0].Name); 
@@ -133,9 +135,9 @@ namespace Wallet.Tests.BLL.Tests
             var mock = new Mock<IReadWriteService>();
             mock.Setup(x => x.ReadData()).Returns(data);
 
-            BillService service = new BillService();
+            BillService service = new BillService(mock.Object);
 
-            List<Bill> actual = service.GetBills(mock.Object);
+            List<Bill> actual = service.GetBills();
 
             Assert.Equal(data, actual);
         }
@@ -147,9 +149,9 @@ namespace Wallet.Tests.BLL.Tests
             var mock = new Mock<IReadWriteService>();
             mock.Setup(x => x.ReadData()).Returns(new List<Bill>());
 
-            BillService service = new BillService();
+            BillService service = new BillService(mock.Object);
 
-            Assert.Throws<BillsNotInitializedException>(() => service.GetBills(mock.Object));
+            Assert.Throws<BillsNotInitializedException>(() => service.GetBills());
         }
 
         public List<Bill> GetList()
