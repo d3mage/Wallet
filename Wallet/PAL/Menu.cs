@@ -52,7 +52,22 @@ namespace PL
                 }
                 else if(func.Equals("delete"))
                 {
-
+                    Console.WriteLine(addMenu);
+                    try
+                    {
+                        func = getInputService.GetVerifiedInput(@"[A-Za-z]{3,10}");
+                    }
+                    catch (TooManyFalseAttemptsException e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    switch (func)
+                    {
+                        case "bill":
+                            businessHandler.DeleteBill(); 
+                            break;
+                    }
+                    break;
                 }
             }
             return 1;

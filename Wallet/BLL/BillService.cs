@@ -48,17 +48,21 @@ namespace BLL
 
         public void AddBill(Bill bill)
         {
-            List<Bill> data;
+            List<Bill> data = new List<Bill>();
             try
             {
                 data = readWriteService.ReadData();
             }
             catch (EmptyListException e)
             {
-                data = new List<Bill>(); 
+                    
             }
-            data.Add(bill);
-            readWriteService.WriteData(data);
+            finally
+            {
+                data.Add(bill);
+                readWriteService.WriteData(data);
+            }
+            
         }
       
         public void DeleteBill(Bill bill)

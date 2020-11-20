@@ -7,5 +7,8 @@ namespace BLL
     public interface IBusinessHandler
     {
         public void AddBill();
+        public void DeleteBill();
+        public void ChangeBill();
+        public int ShowCurrentAccounts();
     }
 }

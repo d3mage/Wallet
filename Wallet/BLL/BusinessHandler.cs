@@ -20,22 +20,87 @@ namespace BLL
         {
             string name = "";
             double money = 150;
-            bool verify = false;
             Console.WriteLine("Enter name of bill: ");
             try
             {
                 name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
-                verify = billService.isBillNameAvailable(name);
+                bool verify = billService.isBillNameAvailable(name);
+                if (verify == true)
+                {
+                    billService.AddBill(billService.CreateNewBill(name, money));
+                }
             }
             catch (Exception e) when (e is EmptyListException ||
             e is TooManyFalseAttemptsException || e is BillNameInvalidException)
             {
                 Console.WriteLine(e.Message);
             }
-            if (verify == true)
+        }
+
+        public void DeleteBill()
+        {
+            string name = "";
+            Console.WriteLine("Enter the name of bill you want to delete: ");
+            try
             {
-                billService.AddBill(billService.CreateNewBill(name, money));
+                List<Bill> bills = billService.GetBills();
+                foreach (var b in bills)
+                {
+                    Console.WriteLine(b.Name);
+                }
+                name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+                bool available = billService.isBillNameAvailable(name);
+                if (available == true) throw new BillNameInvalidException();
+                billService.DeleteBill(billService.GetBillByName(name));
             }
+            catch (Exception e) when (e is EmptyListException || 
+            e is TooManyFalseAttemptsException || e is BillNameInvalidException)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        public void ChangeBill()
+        {
+            Console.WriteLine("Enter name of bill you want to change: ");
+            try
+            {
+                List<Bill> bills = billService.GetBills();
+                foreach (var b in bills)
+                {
+                    Console.WriteLine(b.Name);
+                }
+                string oldName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+                bool available = billService.isBillNameAvailable(oldName);
+                if (available == true) throw new BillNameInvalidException();
+                Console.WriteLine("Enter new name: ");
+                string newName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+                billService.ChangeBillInfo(oldName, newName);
+            }
+            catch (Exception e) when (e is EmptyListException ||
+            e is TooManyFalseAttemptsException || e is BillNameInvalidException)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        public int ShowCurrentAccounts()
+        {
+            try
+            {
+                List<Bill> bills = billService.GetBills();
+                foreach (var b in bills)
+                {
+                    Console.WriteLine($"Name of bill: {b.Name}");
+                    Console.WriteLine($"Money on bill: {b.Money}");
+                }
+                return 1;
+            }
+            catch (BillsNotInitializedException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return -1; 
         }
     }
 }
