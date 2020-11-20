@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using DAL;
 
 namespace BLL
@@ -55,7 +54,7 @@ namespace BLL
                 Console.WriteLine(e.Message);
             }
         }
-        public void ChangeBill()
+        public void ChangeNameOfBill()
         {
             Console.WriteLine("Enter name of bill you want to change: ");
             try

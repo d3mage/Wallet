@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using PL;
 using BLL;
+using DAL; 
 
 namespace Wallet
 {
@@ -9,7 +10,6 @@ namespace Wallet
     {
         static void Main(string[] args)
         {
-            
         }
     }
 }

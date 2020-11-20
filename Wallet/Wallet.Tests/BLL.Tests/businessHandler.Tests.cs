@@ -105,7 +105,7 @@ namespace Wallet.Tests.BLL.Tests
             billServiceMock.Setup(x => x.isBillNameAvailable("work bill")).Returns(false);
 
             BillBusinessHandler businessHandler = new BillBusinessHandler(inputServiceMock.Object, billServiceMock.Object);
-            businessHandler.ChangeBill(); 
+            businessHandler.ChangeNameOfBill(); 
 
             billServiceMock.Verify(x => x.ChangeBillInfo("work bill", "not work bill"), Times.Once);
         }
@@ -124,7 +124,7 @@ namespace Wallet.Tests.BLL.Tests
             billServiceMock.Setup(x => x.isBillNameAvailable("work bill")).Returns(true);
 
             BillBusinessHandler businessHandler = new BillBusinessHandler(inputServiceMock.Object, billServiceMock.Object);
-            businessHandler.ChangeBill(); 
+            businessHandler.ChangeNameOfBill(); 
 
             billServiceMock.Verify(x => x.ChangeBillInfo("work bill", "not work bill"), Times.Never);
         }

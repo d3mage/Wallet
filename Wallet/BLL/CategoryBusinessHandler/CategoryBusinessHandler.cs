@@ -79,12 +79,62 @@ namespace BLL
         }
         public void ChangeCategory()
         {
+            try
+            {
+                Console.WriteLine("What's the name of bill:");
+                List<Bill> bills = billService.GetBills();
+                foreach (var b in bills)
+                {
+                    Console.WriteLine(b.Name);
+                }
+                string billName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+                Bill bill = billService.GetBillByName(billName);
 
+                Console.WriteLine("What's the name of category to change?");
+                foreach (var c in bill.categories)
+                {
+                    Console.WriteLine(c.Name);
+                }
+                string oldName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+                bool available = categoryService.isCategoryNameAvailable(bill, oldName);
+                if (available == true) { throw new CategoryNameInvalidException(); }
+
+                Console.WriteLine("Enter new name of category");
+                string newName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+                categoryService.ChangeCategory(bill, oldName, newName);
+
+                billService.ChangeBillInList(bill);
+            }
+            catch (Exception e) when (e is EmptyListException ||
+            e is TooManyFalseAttemptsException || e is BillNameInvalidException ||
+            e is CategoryNameInvalidException)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
-        public int ShowCurrentCategories()
+        
+        public void ShowCurrentCategories()
         {
-            return 0;
-        }
+            try
+            {
+                Console.WriteLine("What's the name of bill:");
+                List<Bill> bills = billService.GetBills();
+                foreach (var b in bills)
+                {
+                    Console.WriteLine(b.Name);
+                }
+                string billName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+                Bill bill = billService.GetBillByName(billName);
 
+                categoryService.ShowCategories(bill);
+            }
+            catch (Exception e) when (e is EmptyListException ||
+            e is TooManyFalseAttemptsException || e is BillNameInvalidException ||
+            e is CategoryNameInvalidException)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
     }
 }

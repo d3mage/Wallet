@@ -45,5 +45,24 @@ namespace BLL
         {
             bill.categories.Remove(category); 
         }
+
+        public void ChangeCategory(Bill bill, string oldName, string newName)
+        {
+            foreach (var b in bill.categories)
+            {
+                if (b.Name.Equals(oldName))
+                {
+                    b.Name = oldName; 
+                }
+            }
+        }
+
+        public void ShowCategories(Bill bill)
+        {
+            foreach (Category c in bill.categories)
+            {
+                Console.WriteLine(c.Name);
+            }
+        }
     }
 }

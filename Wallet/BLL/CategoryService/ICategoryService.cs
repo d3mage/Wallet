@@ -12,7 +12,7 @@ namespace BLL
         public Category CreateNewCategory(string name);
         public void AddCategory(Bill bill, Category category);
         public void DeleteCategory(Bill bill, Category name);
-
-        public List<Category> GetCategories(Bill bill); 
+        public void ChangeCategory(Bill bill, string oldName, string newName);
+        public void ShowCategories(Bill bill);
     }
 }

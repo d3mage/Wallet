@@ -9,6 +9,6 @@ namespace BLL
         public void AddCategory();
         public void DeleteCategory();
         public void ChangeCategory();
-        public int ShowCurrentCategories(); 
+        public void ShowCurrentCategories(); 
     }
 }

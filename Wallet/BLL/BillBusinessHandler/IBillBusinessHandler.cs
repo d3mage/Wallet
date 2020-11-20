@@ -8,7 +8,7 @@ namespace BLL
     {
         public void AddBill();
         public void DeleteBill();
-        public void ChangeBill();
+        public void ChangeNameOfBill();
         public int ShowCurrentAccounts();
     }
 }
