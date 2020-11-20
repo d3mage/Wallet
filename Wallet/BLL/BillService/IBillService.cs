@@ -13,6 +13,7 @@ namespace BLL
         public void AddBill(Bill bill);
         public void DeleteBill(Bill bill);
         public void ChangeBillInfo(string oldName, string newName);
+        public void ChangeBillInList(Bill bill); 
         public List<Bill> GetBills();
     }
 }

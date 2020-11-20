@@ -53,10 +53,7 @@ namespace BLL
             {
                 data = readWriteService.ReadData();
             }
-            catch (EmptyListException e)
-            {
-                    
-            }
+            catch (Exception e) { }
             finally
             {
                 data.Add(bill);
@@ -85,7 +82,19 @@ namespace BLL
             }
             readWriteService.WriteData(data);
         }
-
+        public void ChangeBillInList(Bill bill)
+        {
+            List<Bill> data = readWriteService.ReadData(); 
+            foreach (var d in data)
+            {
+                if(d.Name.ToLower().Equals(bill.Name))
+                {
+                    d.Money = bill.Money;
+                    d.categories = bill.categories; 
+                }
+            }
+            readWriteService.WriteData(data); 
+        }
         public List<Bill> GetBills()
         {
             List<Bill> data = readWriteService.ReadData();

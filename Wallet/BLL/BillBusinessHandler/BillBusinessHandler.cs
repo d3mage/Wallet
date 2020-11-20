@@ -5,30 +5,27 @@ using DAL;
 
 namespace BLL
 {
-    public class BusinessHandler
+    public class BillBusinessHandler
     {
         private IGetInputService inputService;
         private IBillService billService;
 
-        public BusinessHandler(IGetInputService input, IBillService bill)
+        public BillBusinessHandler(IGetInputService input, IBillService bill)
         {
             inputService = input;
             billService = bill; 
         }
-
+  
         public void AddBill()
         {
-            string name = "";
             double money = 150;
             Console.WriteLine("Enter name of bill: ");
             try
             {
-                name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+                string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
                 bool verify = billService.isBillNameAvailable(name);
-                if (verify == true)
-                {
-                    billService.AddBill(billService.CreateNewBill(name, money));
-                }
+                if (verify != true) throw new BillNameInvalidException(); 
+                billService.AddBill(billService.CreateNewBill(name, money));
             }
             catch (Exception e) when (e is EmptyListException ||
             e is TooManyFalseAttemptsException || e is BillNameInvalidException)
@@ -36,7 +33,6 @@ namespace BLL
                 Console.WriteLine(e.Message);
             }
         }
-
         public void DeleteBill()
         {
             string name = "";
@@ -59,7 +55,6 @@ namespace BLL
                 Console.WriteLine(e.Message);
             }
         }
-
         public void ChangeBill()
         {
             Console.WriteLine("Enter name of bill you want to change: ");
@@ -83,7 +78,6 @@ namespace BLL
                 Console.WriteLine(e.Message);
             }
         }
-
         public int ShowCurrentAccounts()
         {
             try
@@ -102,5 +96,7 @@ namespace BLL
             }
             return -1; 
         }
+
+        
     }
 }

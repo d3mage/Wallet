@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BLL
 {
-    public interface IBusinessHandler
+    public interface IBillBusinessHandler
     {
         public void AddBill();
         public void DeleteBill();

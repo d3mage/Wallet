@@ -15,7 +15,7 @@ namespace Wallet.Tests.PAL.Tests
             var mock = new Mock<IGetInputService>();
             mock.Setup(x => x.GetVerifiedInput(@"[A-Za-z]{3,10}")).Returns("exit");
 
-            Menu menu = new Menu(mock.Object, null);
+            Menu menu = new Menu(mock.Object, null, null);
             int actual = menu.Print();
 
             Assert.Equal(1, actual);
@@ -29,10 +29,10 @@ namespace Wallet.Tests.PAL.Tests
                 .Returns("add")
                 .Returns("bill");
 
-            var handlerMock = new Mock<IBusinessHandler>();
+            var handlerMock = new Mock<IBillBusinessHandler>();
             handlerMock.Setup(x => x.AddBill()); 
 
-            Menu menu = new Menu(inputMock.Object, handlerMock.Object);
+            Menu menu = new Menu(inputMock.Object, handlerMock.Object, null);
 
             menu.Print();
 

@@ -146,6 +146,27 @@ namespace Wallet.Tests.BLL.Tests
         }
 
         [Fact]
+        public void ChangeBillInList_Success()
+        {
+            Bill testBill = new Bill("test bill", 800);
+            List<Bill> data = new List<Bill>();
+            data.Add(testBill); 
+
+            var mock = new Mock<IReadWriteService>();
+            mock.Setup(x => x.ReadData()).Returns(data);
+            mock.Setup(x => x.WriteData(data)).Verifiable();
+
+            Bill changeBill = new Bill("test bill", 300); 
+            BillService service = new BillService(mock.Object);
+
+            service.ChangeBillInList(changeBill);
+
+            Assert.Equal(changeBill.Name, data[0].Name);
+            Assert.Equal(changeBill.Money, data[0].Money);
+            Assert.Equal(changeBill.categories, data[0].categories);
+        }
+
+        [Fact]
         public void GetBills_CountMoreThan0()
         {
             List<Bill> data = GetList();

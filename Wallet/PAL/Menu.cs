@@ -8,12 +8,14 @@ namespace PL
     public class Menu
     {
         IGetInputService getInputService;
-        IBusinessHandler businessHandler;
+        IBillBusinessHandler businessHandler;
+        ICategoryBusinessHandler categoryHandler; 
 
-       public Menu(IGetInputService getInput, IBusinessHandler handler)
+       public Menu(IGetInputService getInput, IBillBusinessHandler business, ICategoryBusinessHandler category)
         {
-            businessHandler = handler; 
             getInputService = getInput;
+            businessHandler = business;
+            categoryHandler = category;
         }
 
         public int Print()
@@ -47,6 +49,9 @@ namespace PL
                         case "bill":
                             businessHandler.AddBill(); 
                             break;
+                        case "category":
+                            categoryHandler.AddCategory();
+                            break; 
                     }
                     break; 
                 }

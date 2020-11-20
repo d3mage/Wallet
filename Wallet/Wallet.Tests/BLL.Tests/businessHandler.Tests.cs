@@ -23,7 +23,7 @@ namespace Wallet.Tests.BLL.Tests
             billServiceMock.Setup(x => x.CreateNewBill("work bill", 150)).Returns(testBill);
             billServiceMock.Setup(x => x.AddBill(testBill));
 
-            BusinessHandler businessHandler = new BusinessHandler(inputServiceMock.Object, billServiceMock.Object);
+            BillBusinessHandler businessHandler = new BillBusinessHandler(inputServiceMock.Object, billServiceMock.Object);
             businessHandler.AddBill(); 
 
             billServiceMock.Verify(x => x.CreateNewBill("work bill", 150), Times.Once);
@@ -43,7 +43,7 @@ namespace Wallet.Tests.BLL.Tests
             billServiceMock.Setup(x => x.CreateNewBill("work bill", 150)).Returns(testBill);
             billServiceMock.Setup(x => x.AddBill(testBill));
 
-            BusinessHandler businessHandler = new BusinessHandler(inputServiceMock.Object, billServiceMock.Object);
+            BillBusinessHandler businessHandler = new BillBusinessHandler(inputServiceMock.Object, billServiceMock.Object);
             businessHandler.AddBill();
 
             billServiceMock.Verify(x => x.CreateNewBill("work bill", 150), Times.Never);
@@ -64,7 +64,7 @@ namespace Wallet.Tests.BLL.Tests
             billServiceMock.Setup(x => x.isBillNameAvailable("work bill")).Returns(false);
             billServiceMock.Setup(x => x.GetBillByName("work bill")).Returns(testBill);
 
-            BusinessHandler businessHandler = new BusinessHandler(inputServiceMock.Object, billServiceMock.Object);
+            BillBusinessHandler businessHandler = new BillBusinessHandler(inputServiceMock.Object, billServiceMock.Object);
             businessHandler.DeleteBill();
 
             billServiceMock.Verify(x => x.DeleteBill(testBill), Times.Once);
@@ -83,7 +83,7 @@ namespace Wallet.Tests.BLL.Tests
             billServiceMock.Setup(x => x.isBillNameAvailable("work bill")).Returns(true);
             billServiceMock.Setup(x => x.GetBillByName("work bill")).Returns(testBill);
 
-            BusinessHandler businessHandler = new BusinessHandler(inputServiceMock.Object, billServiceMock.Object);
+            BillBusinessHandler businessHandler = new BillBusinessHandler(inputServiceMock.Object, billServiceMock.Object);
             businessHandler.DeleteBill();
 
             billServiceMock.Verify(x => x.DeleteBill(testBill), Times.Never);
@@ -104,7 +104,7 @@ namespace Wallet.Tests.BLL.Tests
             billServiceMock.Setup(x => x.GetBills()).Returns(bills);
             billServiceMock.Setup(x => x.isBillNameAvailable("work bill")).Returns(false);
 
-            BusinessHandler businessHandler = new BusinessHandler(inputServiceMock.Object, billServiceMock.Object);
+            BillBusinessHandler businessHandler = new BillBusinessHandler(inputServiceMock.Object, billServiceMock.Object);
             businessHandler.ChangeBill(); 
 
             billServiceMock.Verify(x => x.ChangeBillInfo("work bill", "not work bill"), Times.Once);
@@ -123,7 +123,7 @@ namespace Wallet.Tests.BLL.Tests
             billServiceMock.Setup(x => x.GetBills()).Returns(bills);
             billServiceMock.Setup(x => x.isBillNameAvailable("work bill")).Returns(true);
 
-            BusinessHandler businessHandler = new BusinessHandler(inputServiceMock.Object, billServiceMock.Object);
+            BillBusinessHandler businessHandler = new BillBusinessHandler(inputServiceMock.Object, billServiceMock.Object);
             businessHandler.ChangeBill(); 
 
             billServiceMock.Verify(x => x.ChangeBillInfo("work bill", "not work bill"), Times.Never);
@@ -137,7 +137,7 @@ namespace Wallet.Tests.BLL.Tests
             var billServiceMock = new Mock<IBillService>();
             billServiceMock.Setup(x => x.GetBills()).Returns(bills);
 
-            BusinessHandler businessHandler = new BusinessHandler(null, billServiceMock.Object);
+            BillBusinessHandler businessHandler = new BillBusinessHandler(null, billServiceMock.Object);
 
             int actual = businessHandler.ShowCurrentAccounts();
 
@@ -151,7 +151,7 @@ namespace Wallet.Tests.BLL.Tests
             var billServiceMock = new Mock<IBillService>();
             billServiceMock.Setup(x => x.GetBills()).Throws<BillsNotInitializedException>();
 
-            BusinessHandler businessHandler = new BusinessHandler(null, billServiceMock.Object);
+            BillBusinessHandler businessHandler = new BillBusinessHandler(null, billServiceMock.Object);
 
             int actual = businessHandler.ShowCurrentAccounts();
 
