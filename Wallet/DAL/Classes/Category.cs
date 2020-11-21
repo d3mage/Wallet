@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DAL
 {
@@ -8,10 +7,9 @@ namespace DAL
     public class Category
     {
         public string Name { get; set; }
-        public List<MoneyProfit> MoneyProfits { get; set; }
-        public List<MoneyExpense> MoneyExpenses { get; set; }
+        public List<MoneyEvent> moneyEvents;
 
         public Category() { }
-        public Category(string name) => Name = name; 
+        public Category(string name) => Name = name;
     }
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using BLL;
 using Xunit;
-using BLL;
 
 namespace Wallet.Tests.BLL.Tests
 {
@@ -17,7 +14,7 @@ namespace Wallet.Tests.BLL.Tests
 
             bool actual = service.isInputCorrect(name, pattern);
 
-            Assert.Equal(expected, actual); 
+            Assert.Equal(expected, actual);
         }
     }
 }

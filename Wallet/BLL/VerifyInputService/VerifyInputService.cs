@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace BLL
 {
@@ -9,7 +6,7 @@ namespace BLL
     {
         public bool isInputCorrect(string input, string pattern)
         {
-            return Regex.IsMatch(input, pattern); 
+            return Regex.IsMatch(input, pattern);
         }
     }
 }

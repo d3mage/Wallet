@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
-using Moq;
-using BLL;
+﻿using BLL;
 using DAL;
+using Moq;
+using System.Collections.Generic;
+using Xunit;
 
 namespace Wallet.Tests.BLL.Tests
 {
@@ -47,7 +45,7 @@ namespace Wallet.Tests.BLL.Tests
             Category category = new Category("work");
             List<Category> categories = new List<Category>() { category };
             Bill testBill = new Bill("work bill", 150);
-            testBill.categories = categories; 
+            testBill.categories = categories;
             List<Bill> bills = new List<Bill>() { testBill };
 
             var inputServiceMock = new Mock<IGetInputService>();

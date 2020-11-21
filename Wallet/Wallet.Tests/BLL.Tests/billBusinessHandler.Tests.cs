@@ -1,14 +1,12 @@
-﻿using Moq;
-using System;
+﻿using BLL;
+using DAL;
+using Moq;
 using System.Collections.Generic;
-using System.Text;
 using Xunit;
-using BLL;
-using DAL; 
 
 namespace Wallet.Tests.BLL.Tests
 {
-    public class businessHandler
+    public class billBusinessHandler_Tests
     {
         [Fact]
         public void AddBill_Success()
@@ -24,7 +22,7 @@ namespace Wallet.Tests.BLL.Tests
             billServiceMock.Setup(x => x.AddBill(testBill));
 
             BillBusinessHandler businessHandler = new BillBusinessHandler(inputServiceMock.Object, billServiceMock.Object);
-            businessHandler.AddBill(); 
+            businessHandler.AddBill();
 
             billServiceMock.Verify(x => x.CreateNewBill("work bill", 150), Times.Once);
             billServiceMock.Verify(x => x.AddBill(testBill), Times.Once);
@@ -53,14 +51,12 @@ namespace Wallet.Tests.BLL.Tests
         [Fact]
         public void DeleteBill_Success()
         {
-            List<Bill> bills = GetList(); 
             Bill testBill = new Bill("work bill", 150);
 
             var inputServiceMock = new Mock<IGetInputService>();
             inputServiceMock.Setup(x => x.GetVerifiedInput(@"[A-Za-z]{0,20}")).Returns("work bill");
 
             var billServiceMock = new Mock<IBillService>();
-            billServiceMock.Setup(x => x.GetBills()).Returns(bills);
             billServiceMock.Setup(x => x.isBillNameAvailable("work bill")).Returns(false);
             billServiceMock.Setup(x => x.GetBillByName("work bill")).Returns(testBill);
 
@@ -68,18 +64,16 @@ namespace Wallet.Tests.BLL.Tests
             businessHandler.DeleteBill();
 
             billServiceMock.Verify(x => x.DeleteBill(testBill), Times.Once);
-        } 
+        }
         [Fact]
         public void DeleteBill_NameUnavailable()
         {
-            List<Bill> bills = GetList(); 
             Bill testBill = new Bill("work bill", 150);
 
             var inputServiceMock = new Mock<IGetInputService>();
             inputServiceMock.Setup(x => x.GetVerifiedInput(@"[A-Za-z]{0,20}")).Returns("work bill");
 
             var billServiceMock = new Mock<IBillService>();
-            billServiceMock.Setup(x => x.GetBills()).Returns(bills);
             billServiceMock.Setup(x => x.isBillNameAvailable("work bill")).Returns(true);
             billServiceMock.Setup(x => x.GetBillByName("work bill")).Returns(testBill);
 
@@ -92,7 +86,6 @@ namespace Wallet.Tests.BLL.Tests
         [Fact]
         public void ChangeBill_Success()
         {
-            List<Bill> bills = GetList();
             Bill testBill = new Bill("work bill", 150);
 
             var inputServiceMock = new Mock<IGetInputService>();
@@ -101,18 +94,16 @@ namespace Wallet.Tests.BLL.Tests
                 .Returns("not work bill");
 
             var billServiceMock = new Mock<IBillService>();
-            billServiceMock.Setup(x => x.GetBills()).Returns(bills);
             billServiceMock.Setup(x => x.isBillNameAvailable("work bill")).Returns(false);
 
             BillBusinessHandler businessHandler = new BillBusinessHandler(inputServiceMock.Object, billServiceMock.Object);
-            businessHandler.ChangeNameOfBill(); 
+            businessHandler.ChangeNameOfBill();
 
             billServiceMock.Verify(x => x.ChangeBillInfo("work bill", "not work bill"), Times.Once);
         }
         [Fact]
         public void ChangeBill_NameUnavailable()
         {
-            List<Bill> bills = GetList();
 
             var inputServiceMock = new Mock<IGetInputService>();
             inputServiceMock.SetupSequence(x => x.GetVerifiedInput(@"[A-Za-z]{0,20}"))
@@ -120,11 +111,10 @@ namespace Wallet.Tests.BLL.Tests
                 .Returns("not work bill");
 
             var billServiceMock = new Mock<IBillService>();
-            billServiceMock.Setup(x => x.GetBills()).Returns(bills);
             billServiceMock.Setup(x => x.isBillNameAvailable("work bill")).Returns(true);
 
             BillBusinessHandler businessHandler = new BillBusinessHandler(inputServiceMock.Object, billServiceMock.Object);
-            businessHandler.ChangeNameOfBill(); 
+            businessHandler.ChangeNameOfBill();
 
             billServiceMock.Verify(x => x.ChangeBillInfo("work bill", "not work bill"), Times.Never);
         }
@@ -160,22 +150,18 @@ namespace Wallet.Tests.BLL.Tests
 
         public List<Bill> GetList()
         {
-            MoneyProfit profit = new MoneyProfit("worked", 300);
-            List<MoneyProfit> profits = new List<MoneyProfit> { profit };
-            MoneyExpense expense = new MoneyExpense("relaxed", 300);
-            List<MoneyExpense> expenses = new List<MoneyExpense> { expense };
+            MoneyEvent profit = new MoneyEvent(false, "worked", 300);
+            MoneyEvent expense = new MoneyEvent(true, "relaxed", 300);
+            List<MoneyEvent> moneyEvents = new List<MoneyEvent>() { profit, expense };
 
             Category category = new Category("work");
-            List<Category> categories = new List<Category>();
-            categories.Add(category);
-            category.MoneyProfits = profits;
-            category.MoneyExpenses = expenses;
+            category.moneyEvents = moneyEvents;
+            List<Category> categories = new List<Category>() { category };
 
-            List<Bill> toReturn = new List<Bill>();
             Bill bill = new Bill("work bill", 800);
             bill.categories = categories;
-            toReturn.Add(bill);
 
+            List<Bill> toReturn = new List<Bill>() { bill };
             return toReturn;
         }
     }

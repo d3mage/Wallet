@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace DAL.Provider
@@ -22,7 +21,7 @@ namespace DAL.Provider
             }
         }
 
-       public List<Bill> Read(string connection)
+        public List<Bill> Read(string connection)
         {
             List<Bill> data;
             using (FileStream fs = new FileStream(connection, FileMode.OpenOrCreate))

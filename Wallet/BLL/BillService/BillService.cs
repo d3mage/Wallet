@@ -1,16 +1,15 @@
-﻿using System;
+﻿using DAL;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using DAL;
 
 namespace BLL
 {
     public class BillService : IBillService
     {
-        public IReadWriteService readWriteService; 
+        public IReadWriteService readWriteService;
         public BillService(IReadWriteService readWrite)
         {
-            readWriteService = readWrite; 
+            readWriteService = readWrite;
         }
 
         public bool isBillNameAvailable(string name)
@@ -22,7 +21,7 @@ namespace BLL
             }
             catch (EmptyListException e)
             {
-                return true; 
+                return true;
             }
             foreach (var d in data)
             {
@@ -31,19 +30,20 @@ namespace BLL
             return true;
         }
 
+
         public Bill GetBillByName(string name)
         {
             List<Bill> data = readWriteService.ReadData();
-            foreach (var d in data) 
+            foreach (var d in data)
             {
-                if (d.Name.ToLower().Equals(name)) return d; 
+                if (d.Name.ToLower().Equals(name)) return d;
             }
             throw new BillNameInvalidException();
         }
 
         public Bill CreateNewBill(string name, double money)
         {
-            return new Bill(name, money); 
+            return new Bill(name, money);
         }
 
         public void AddBill(Bill bill)
@@ -59,17 +59,17 @@ namespace BLL
                 data.Add(bill);
                 readWriteService.WriteData(data);
             }
-            
+
         }
-      
+
         public void DeleteBill(Bill bill)
         {
             List<Bill> data = readWriteService.ReadData();
             data.Remove(bill);
-            readWriteService.WriteData(data); 
+            readWriteService.WriteData(data);
         }
 
-        
+
         public void ChangeBillInfo(string oldName, string newName)
         {
             List<Bill> data = readWriteService.ReadData();
@@ -84,16 +84,16 @@ namespace BLL
         }
         public void ChangeBillInList(Bill bill)
         {
-            List<Bill> data = readWriteService.ReadData(); 
+            List<Bill> data = readWriteService.ReadData();
             foreach (var d in data)
             {
-                if(d.Name.ToLower().Equals(bill.Name))
+                if (d.Name.ToLower().Equals(bill.Name))
                 {
                     d.Money = bill.Money;
-                    d.categories = bill.categories; 
+                    d.categories = bill.categories;
                 }
             }
-            readWriteService.WriteData(data); 
+            readWriteService.WriteData(data);
         }
         public List<Bill> GetBills()
         {
@@ -102,7 +102,36 @@ namespace BLL
             {
                 return data;
             }
-            else throw new BillsNotInitializedException(); 
+            else throw new BillsNotInitializedException();
+        }
+        public void PrintBills()
+        {
+            List<Bill> data = readWriteService.ReadData();
+            foreach (var d in data)
+            {
+                Console.WriteLine(d.Name);
+            }
+        }
+
+        public void ChangeBillMoney(Bill bill, MoneyEvent moneyEvent)
+        {
+            if (moneyEvent.isExpense != true)
+            {
+                Double tempMoney = bill.Money;
+                tempMoney += moneyEvent.Value;
+                bill.Money = tempMoney;
+            }
+            else
+            {
+                if (bill.Money < moneyEvent.Value)
+                    throw new InsufficientFundsException();
+                else
+                {
+                    Double tempMoney = bill.Money;
+                    tempMoney -= moneyEvent.Value;
+                    bill.Money = tempMoney;
+                }
+            }
         }
     }
 }

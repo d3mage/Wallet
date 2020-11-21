@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BLL
+﻿namespace BLL
 {
     public class GetInputService : IGetInputService
     {
@@ -12,14 +8,14 @@ namespace BLL
         public GetInputService(IReadUserInputService readInput, IVerifyInputService verifyInput)
         {
             readInputService = readInput;
-            verifyInputService = verifyInput; 
+            verifyInputService = verifyInput;
         }
 
         public string GetVerifiedInput(string pattern)
         {
             string input = readInputService.ReadInput();
             bool isInputProper = verifyInputService.isInputCorrect(input, pattern);
-            if(isInputProper != true)
+            if (isInputProper != true)
             {
                 for (int i = 0; i < 2; ++i)
                 {
@@ -27,9 +23,9 @@ namespace BLL
                     isInputProper = verifyInputService.isInputCorrect(input, pattern);
                 }
             }
-            return isInputProper ? input.ToLower() : throw new TooManyFalseAttemptsException(); 
+            return isInputProper ? input.ToLower() : throw new TooManyFalseAttemptsException();
         }
 
-        
+
     }
 }

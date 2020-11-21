@@ -1,7 +1,6 @@
-﻿using System;
+﻿using DAL;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using DAL;
 
 namespace BLL
 {
@@ -19,31 +18,31 @@ namespace BLL
 
         public void AddCategory(Bill bill, Category category)
         {
-            if(bill.categories == null)
+            if (bill.categories == null)
             {
-                bill.categories = new List<Category>(); 
+                bill.categories = new List<Category>();
             }
-            bill.categories.Add(category); 
-        }
-       
-        public Category CreateNewCategory(string name)
-        {
-            return new Category(name); 
+            bill.categories.Add(category);
         }
 
-      
+        public Category CreateNewCategory(string name)
+        {
+            return new Category(name);
+        }
+
+
         public Category GetCategoryByName(Bill bill, string name)
         {
-            foreach(var b in bill.categories)
+            foreach (var b in bill.categories)
             {
-                if (b.Name.Equals(name)) return b; 
+                if (b.Name.Equals(name)) return b;
             }
-            throw new CategoryNameInvalidException();  
+            throw new CategoryNameInvalidException();
         }
 
         public void DeleteCategory(Bill bill, Category category)
         {
-            bill.categories.Remove(category); 
+            bill.categories.Remove(category);
         }
 
         public void ChangeCategory(Bill bill, string oldName, string newName)
@@ -52,7 +51,7 @@ namespace BLL
             {
                 if (b.Name.Equals(oldName))
                 {
-                    b.Name = oldName; 
+                    b.Name = oldName;
                 }
             }
         }

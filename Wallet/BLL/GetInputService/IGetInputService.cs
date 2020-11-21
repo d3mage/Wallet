@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BLL
+﻿namespace BLL
 {
     public interface IGetInputService
     {
-        public string GetVerifiedInput(string pattern); 
+        public string GetVerifiedInput(string pattern);
     }
 }

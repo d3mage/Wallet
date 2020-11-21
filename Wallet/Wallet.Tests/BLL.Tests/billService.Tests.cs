@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using Xunit;
-using BLL;
+﻿using BLL;
 using DAL;
 using Moq;
-using System;
+using System.Collections.Generic;
+using Xunit;
 
 namespace Wallet.Tests.BLL.Tests
 {
@@ -15,13 +14,13 @@ namespace Wallet.Tests.BLL.Tests
             List<Bill> data = GetList();
 
             var mock = new Mock<IReadWriteService>();
-            mock.Setup(x => x.ReadData()).Throws<EmptyListException>(); 
+            mock.Setup(x => x.ReadData()).Throws<EmptyListException>();
 
             BillService service = new BillService(mock.Object);
 
             bool actual = service.isBillNameAvailable("");
 
-            Assert.True(actual); 
+            Assert.True(actual);
         }
 
         [Theory]
@@ -49,7 +48,7 @@ namespace Wallet.Tests.BLL.Tests
             var mock = new Mock<IReadWriteService>();
             mock.Setup(x => x.ReadData()).Returns(data);
 
-            Bill expected = new Bill("work bill", 800); 
+            Bill expected = new Bill("work bill", 800);
             BillService service = new BillService(mock.Object);
 
             Bill actual = service.GetBillByName("work bill");
@@ -68,13 +67,13 @@ namespace Wallet.Tests.BLL.Tests
 
             BillService service = new BillService(mock.Object);
 
-            Assert.Throws<BillNameInvalidException>(() => service.GetBillByName("test bill")); 
+            Assert.Throws<BillNameInvalidException>(() => service.GetBillByName("test bill"));
         }
 
         [Fact]
         public void AddBill_Success()
         {
-            List<Bill> data = GetList(); 
+            List<Bill> data = GetList();
 
             var mock = new Mock<IReadWriteService>();
             mock.Setup(x => x.ReadData()).Returns(data);
@@ -86,7 +85,7 @@ namespace Wallet.Tests.BLL.Tests
             service.AddBill(testBill);
 
             mock.Verify(x => x.WriteData(data), Times.Once);
-            Assert.Contains(testBill, data); 
+            Assert.Contains(testBill, data);
         }
 
         [Fact]
@@ -130,19 +129,19 @@ namespace Wallet.Tests.BLL.Tests
         {
             List<Bill> data = GetList();
             List<Bill> expectedList = GetList();
-            expectedList[0].Name = "test bill"; 
+            expectedList[0].Name = "test bill";
 
             var mock = new Mock<IReadWriteService>();
             mock.Setup(x => x.ReadData()).Returns(data);
             mock.Setup(x => x.WriteData(data)).Verifiable();
 
-            Bill testBill = new Bill("test bill", 800); 
+            Bill testBill = new Bill("test bill", 800);
             BillService service = new BillService(mock.Object);
 
             service.ChangeBillInfo("work bill", "test bill");
 
             mock.Verify(x => x.WriteData(data), Times.Once);
-            Assert.Equal(expectedList[0].Name, data[0].Name); 
+            Assert.Equal(expectedList[0].Name, data[0].Name);
         }
 
         [Fact]
@@ -150,13 +149,13 @@ namespace Wallet.Tests.BLL.Tests
         {
             Bill testBill = new Bill("test bill", 800);
             List<Bill> data = new List<Bill>();
-            data.Add(testBill); 
+            data.Add(testBill);
 
             var mock = new Mock<IReadWriteService>();
             mock.Setup(x => x.ReadData()).Returns(data);
             mock.Setup(x => x.WriteData(data)).Verifiable();
 
-            Bill changeBill = new Bill("test bill", 300); 
+            Bill changeBill = new Bill("test bill", 300);
             BillService service = new BillService(mock.Object);
 
             service.ChangeBillInList(changeBill);
@@ -183,8 +182,6 @@ namespace Wallet.Tests.BLL.Tests
         [Fact]
         public void GetBills_CountLessThan0()
         {
-            List<Bill> data = GetList();
-
             var mock = new Mock<IReadWriteService>();
             mock.Setup(x => x.ReadData()).Returns(new List<Bill>());
 
@@ -193,25 +190,46 @@ namespace Wallet.Tests.BLL.Tests
             Assert.Throws<BillsNotInitializedException>(() => service.GetBills());
         }
 
+        [Theory]
+        [InlineData(false, 300, 600)]
+        [InlineData(true, 400, 100)]
+        public void ChangeBillMoney_Theory(bool isExpense, double money, double expected)
+        {
+            MoneyEvent moneyEvent = new MoneyEvent(isExpense, "worked", 300);
+            Bill bill = new Bill("work bill", money);
+            BillService service = new BillService(null);
+
+            service.ChangeBillMoney(bill, moneyEvent);
+
+            Assert.Equal(expected, bill.Money);
+        }
+
+        [Fact]
+        public void ChangeBillMoney_Exception()
+        {
+            MoneyEvent moneyEvent = new MoneyEvent(true, "worked", 300);
+            Bill bill = new Bill("work bill", 250);
+            BillService service = new BillService(null);
+
+            Assert.Throws<InsufficientFundsException>(() => service.ChangeBillMoney(bill, moneyEvent));
+        }
+
         public List<Bill> GetList()
         {
-            MoneyProfit profit = new MoneyProfit("worked", 300);
-            List<MoneyProfit> profits = new List<MoneyProfit> { profit };
-            MoneyExpense expense = new MoneyExpense("relaxed", 300);
-            List<MoneyExpense> expenses = new List<MoneyExpense> { expense };
+            MoneyEvent profit = new MoneyEvent(false, "worked", 300);
+            MoneyEvent expense = new MoneyEvent(true, "relaxed", 300);
+            List<MoneyEvent> moneyEvents = new List<MoneyEvent>() { profit, expense };
 
             Category category = new Category("work");
-            List<Category> categories = new List<Category>();
-            categories.Add(category);
-            category.MoneyProfits = profits;
-            category.MoneyExpenses = expenses;
+            category.moneyEvents = moneyEvents;
+            List<Category> categories = new List<Category>() { category };
 
-            List<Bill> toReturn = new List<Bill>();
             Bill bill = new Bill("work bill", 800);
             bill.categories = categories;
-            toReturn.Add(bill);
 
+            List<Bill> toReturn = new List<Bill>() { bill };
             return toReturn;
         }
+
     }
 }

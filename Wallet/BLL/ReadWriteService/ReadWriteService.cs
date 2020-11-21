@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
-using DAL;
+﻿using DAL;
+using System.Collections.Generic;
 
 namespace BLL
 {
-    public class ReadWriteService
+    public class ReadWriteService : IReadWriteService
     {
-        private IBillContext _billContext; 
+        private IBillContext _billContext;
         public ReadWriteService(IBillContext context)
         {
-            _billContext = context; 
+            _billContext = context;
         }
         public List<Bill> ReadData() => _billContext.GetData();
-        public void WriteData(List<Bill> data) => _billContext.SetData(data); 
+        public void WriteData(List<Bill> data) => _billContext.SetData(data);
     }
 }

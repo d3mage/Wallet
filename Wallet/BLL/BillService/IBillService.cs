@@ -1,7 +1,5 @@
-﻿using System;
+﻿using DAL;
 using System.Collections.Generic;
-using System.Text;
-using DAL; 
 
 namespace BLL
 {
@@ -13,7 +11,9 @@ namespace BLL
         public void AddBill(Bill bill);
         public void DeleteBill(Bill bill);
         public void ChangeBillInfo(string oldName, string newName);
-        public void ChangeBillInList(Bill bill); 
+        public void ChangeBillInList(Bill bill);
         public List<Bill> GetBills();
+        public void PrintBills();
+        public void ChangeBillMoney(Bill bill, MoneyEvent moneyEvent);
     }
 }

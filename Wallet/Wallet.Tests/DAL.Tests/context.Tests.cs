@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using Xunit;
-using Moq;
-using DAL;
+﻿using DAL;
 using DAL.Provider;
+using Moq;
 using System;
+using System.Collections.Generic;
+using Xunit;
 
 namespace Wallet.Tests.DAL.Tests
 {
@@ -39,7 +39,7 @@ namespace Wallet.Tests.DAL.Tests
 
             var context = new BillContext(provider, conn);
 
-            Assert.Throws<ProviderException>(() => context.GetData()); 
+            Assert.Throws<ProviderException>(() => context.GetData());
         }
 
         [Fact]
@@ -85,24 +85,18 @@ namespace Wallet.Tests.DAL.Tests
 
         public List<Bill> GetList()
         {
-            MoneyProfit profit = new MoneyProfit("worked", 300);
-            List<MoneyProfit> profits = new List<MoneyProfit>();
-            profits.Add(profit);
-            MoneyExpense expense = new MoneyExpense("relaxed", 300);
-            List<MoneyExpense> expenses = new List<MoneyExpense>();
-            expenses.Add(expense);
+            MoneyEvent profit = new MoneyEvent(false, "worked", 300);
+            MoneyEvent expense = new MoneyEvent(true, "relaxed", 300);
+            List<MoneyEvent> moneyEvents = new List<MoneyEvent>() { profit, expense };
 
             Category category = new Category("work");
-            List<Category> categories = new List<Category>();
-            categories.Add(category);
-            category.MoneyProfits = profits;
-            category.MoneyExpenses = expenses;
+            category.moneyEvents = moneyEvents;
+            List<Category> categories = new List<Category>() { category };
 
-            List<Bill> toReturn = new List<Bill>();
             Bill bill = new Bill("work bill", 800);
             bill.categories = categories;
-            toReturn.Add(bill);
 
+            List<Bill> toReturn = new List<Bill>() { bill };
             return toReturn;
         }
     }

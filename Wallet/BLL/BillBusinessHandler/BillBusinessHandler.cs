@@ -1,10 +1,10 @@
-﻿using System;
+﻿using DAL;
+using System;
 using System.Collections.Generic;
-using DAL;
 
 namespace BLL
 {
-    public class BillBusinessHandler
+    public class BillBusinessHandler : IBillBusinessHandler
     {
         private IGetInputService inputService;
         private IBillService billService;
@@ -12,9 +12,9 @@ namespace BLL
         public BillBusinessHandler(IGetInputService input, IBillService bill)
         {
             inputService = input;
-            billService = bill; 
+            billService = bill;
         }
-  
+
         public void AddBill()
         {
             double money = 150;
@@ -22,8 +22,8 @@ namespace BLL
             try
             {
                 string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
-                bool verify = billService.isBillNameAvailable(name);
-                if (verify != true) throw new BillNameInvalidException(); 
+                bool available = billService.isBillNameAvailable(name);
+                if (available != true) throw new BillNameInvalidException();
                 billService.AddBill(billService.CreateNewBill(name, money));
             }
             catch (Exception e) when (e is EmptyListException ||
@@ -34,21 +34,16 @@ namespace BLL
         }
         public void DeleteBill()
         {
-            string name = "";
             Console.WriteLine("Enter the name of bill you want to delete: ");
             try
             {
-                List<Bill> bills = billService.GetBills();
-                foreach (var b in bills)
-                {
-                    Console.WriteLine(b.Name);
-                }
-                name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+                billService.PrintBills();
+                string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
                 bool available = billService.isBillNameAvailable(name);
                 if (available == true) throw new BillNameInvalidException();
                 billService.DeleteBill(billService.GetBillByName(name));
             }
-            catch (Exception e) when (e is EmptyListException || 
+            catch (Exception e) when (e is EmptyListException ||
             e is TooManyFalseAttemptsException || e is BillNameInvalidException)
             {
                 Console.WriteLine(e.Message);
@@ -59,14 +54,11 @@ namespace BLL
             Console.WriteLine("Enter name of bill you want to change: ");
             try
             {
-                List<Bill> bills = billService.GetBills();
-                foreach (var b in bills)
-                {
-                    Console.WriteLine(b.Name);
-                }
+                billService.PrintBills();
                 string oldName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
                 bool available = billService.isBillNameAvailable(oldName);
                 if (available == true) throw new BillNameInvalidException();
+
                 Console.WriteLine("Enter new name: ");
                 string newName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
                 billService.ChangeBillInfo(oldName, newName);
@@ -93,9 +85,9 @@ namespace BLL
             {
                 Console.WriteLine(e.Message);
             }
-            return -1; 
+            return -1;
         }
 
-        
+
     }
 }

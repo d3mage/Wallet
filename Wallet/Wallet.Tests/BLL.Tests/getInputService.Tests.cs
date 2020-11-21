@@ -1,6 +1,6 @@
-﻿using Moq;
+﻿using BLL;
+using Moq;
 using Xunit;
-using BLL;
 
 namespace Wallet.Tests.BLL.Tests
 {
@@ -23,7 +23,7 @@ namespace Wallet.Tests.BLL.Tests
 
             inputMock.Verify(x => x.ReadInput(), Times.Once);
             verifyMock.Verify(x => x.isInputCorrect("data", ""), Times.Once);
-            Assert.Equal(expected, actual); 
+            Assert.Equal(expected, actual);
         }
         [Fact]
         public void GetInputService_FirstInputFalse()
@@ -38,7 +38,7 @@ namespace Wallet.Tests.BLL.Tests
 
             GetInputService inputService = new GetInputService(inputMock.Object, verifyMock.Object);
 
-            Assert.Throws<TooManyFalseAttemptsException>(() => inputService.GetVerifiedInput("")); 
+            Assert.Throws<TooManyFalseAttemptsException>(() => inputService.GetVerifiedInput(""));
         }
     }
 }

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BLL
+﻿namespace BLL
 {
     public interface ICategoryBusinessHandler
     {
         public void AddCategory();
         public void DeleteCategory();
         public void ChangeCategory();
-        public void ShowCurrentCategories(); 
+        public void ShowCurrentCategories();
     }
 }

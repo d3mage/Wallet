@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DAL
 {
@@ -15,7 +14,7 @@ namespace DAL
         public Bill(string name, double money)
         {
             Name = name;
-            Money = money; 
+            Money = money;
         }
     }
 }

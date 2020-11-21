@@ -1,6 +1,6 @@
-﻿using System;
+﻿using DAL.Provider;
+using System;
 using System.Collections.Generic;
-using DAL.Provider;
 
 namespace DAL
 {
@@ -13,8 +13,8 @@ namespace DAL
 
         public BillContext(IProvider<Bill> provider, string connection)
         {
-            DataProvider = provider; 
-            ConnectionString = connection; 
+            DataProvider = provider;
+            ConnectionString = connection;
         }
 
         public List<Bill> GetData()
@@ -33,12 +33,12 @@ namespace DAL
                     }
                     catch (Exception ex)
                     {
-                        throw new EmptyListException(); 
+                        throw new EmptyListException();
                     }
                     return _storedData;
                 }
             }
-            else throw new ProviderException(); 
+            else throw new ProviderException();
         }
 
         public void SetData(List<Bill> data)

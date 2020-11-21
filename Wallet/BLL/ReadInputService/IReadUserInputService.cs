@@ -2,6 +2,6 @@
 {
     public interface IReadUserInputService
     {
-        public string ReadInput(); 
+        public string ReadInput();
     }
 }

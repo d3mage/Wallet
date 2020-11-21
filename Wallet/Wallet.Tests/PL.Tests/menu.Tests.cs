@@ -1,16 +1,14 @@
-﻿using System;
-using System.IO;
-using Xunit;
+﻿using BLL;
 using Moq;
 using PL;
-using BLL;
+using Xunit;
 
 namespace Wallet.Tests.PAL.Tests
 {
     public class menu_Tests
     {
         [Fact]
-       public void MenuCall_Exit()
+        public void MenuCall_Exit()
         {
             var mock = new Mock<IGetInputService>();
             mock.Setup(x => x.GetVerifiedInput(@"[A-Za-z]{3,10}")).Returns("exit");
@@ -20,7 +18,7 @@ namespace Wallet.Tests.PAL.Tests
 
             Assert.Equal(1, actual);
         }
-        
+
         [Fact]
         public void MenuCall_CallsSecondaryMenyAdd()
         {
@@ -30,13 +28,13 @@ namespace Wallet.Tests.PAL.Tests
                 .Returns("bill");
 
             var handlerMock = new Mock<IBillBusinessHandler>();
-            handlerMock.Setup(x => x.AddBill()); 
+            handlerMock.Setup(x => x.AddBill());
 
             Menu menu = new Menu(inputMock.Object, handlerMock.Object, null);
 
             menu.Print();
 
-            handlerMock.Verify(x => x.AddBill(), Times.Once); 
+            handlerMock.Verify(x => x.AddBill(), Times.Once);
         }
     }
 }
