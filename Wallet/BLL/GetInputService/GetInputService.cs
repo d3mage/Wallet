@@ -15,9 +15,9 @@
         {
             string input = readInputService.ReadInput();
             bool isInputProper = verifyInputService.isInputCorrect(input, pattern);
-            if (isInputProper != true)
+            for (int i = 0; i < 2; ++i)
             {
-                for (int i = 0; i < 2; ++i)
+                if (isInputProper != true)
                 {
                     input = readInputService.ReadInput();
                     isInputProper = verifyInputService.isInputCorrect(input, pattern);

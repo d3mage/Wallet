@@ -15,7 +15,12 @@ namespace DAL
             isExpense = expense;
             Description = description;
             Value = value;
-            Date = DateTime.Now;
+            Date = DateTime.Today;
+        }
+
+        public override string ToString()
+        {
+            return $"Date: {Date}\nEvent: {Description}\nValue: {Value}";
         }
     }
 

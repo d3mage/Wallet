@@ -133,5 +133,85 @@ namespace BLL
                 }
             }
         }
+
+        public void GetMoneyInRange(Bill bill, DateTime startDate, DateTime endDate, out double profits, out double expenses)
+        {
+            double tempProfits = 0, tempExpenses = 0;
+
+            foreach (var c in bill.categories)
+            {
+                foreach (var m in c.moneyEvents)
+                {
+                    if (DateTime.Compare(startDate, m.Date) < 0 && DateTime.Compare(endDate, m.Date) > 0)
+                    {
+                        if (m.isExpense == false)
+                        {
+                            tempProfits += m.Value;
+                        }
+                        else
+                        {
+                            tempExpenses -= m.Value;
+                        }
+                        Console.WriteLine(m.ToString());
+                    }
+                    else if (DateTime.Compare(endDate, m.Date) <= 0) break;
+                }
+            }
+            profits = tempProfits;
+            expenses = tempExpenses; 
+        }
+        
+        public void GetMoneyByDate(Bill bill, DateTime date, out double profits, out double expenses)
+        {
+            double tempProfits = 0, tempExpenses = 0;
+
+            foreach (var c in bill.categories)
+            {
+                foreach (var m in c.moneyEvents)
+                {
+                    if (DateTime.Compare(date, m.Date) == 0)
+                    {
+                        if (m.isExpense == false)
+                        {
+                            tempProfits += m.Value;
+                        }
+                        else
+                        {
+                            tempExpenses -= m.Value;
+                        }
+                        Console.WriteLine(m.ToString());
+                    }
+                    else if (DateTime.Compare(date, m.Date) <= 0) break;
+                }
+            }
+            profits = tempProfits;
+            expenses = tempExpenses; 
+        }
+
+        public void GetMoneyByCategory(Bill bill, string name,  out double profits, out double expenses)
+        {
+            double tempProfits = 0, tempExpenses = 0;
+
+            foreach (var c in bill.categories)
+            {
+                if(c.Name.Equals(name))
+                {
+                    foreach(var m in c.moneyEvents)
+                    {
+                        if (m.isExpense == false)
+                        {
+                            tempProfits += m.Value;
+                        }
+                        else
+                        {
+                            tempExpenses -= m.Value;
+                        }
+                    }
+                }    
+            }
+
+            profits = tempProfits;
+            expenses = tempExpenses; 
+        }
     }
 }

@@ -11,25 +11,10 @@ namespace BLL
             if (bill.categories == null) return true;
             foreach (var c in bill.categories)
             {
-                if (c.Name.ToLower().Equals(name)) return false;
+                if (c.Name.Equals(name)) return false;
             }
             return true;
         }
-
-        public void AddCategory(Bill bill, Category category)
-        {
-            if (bill.categories == null)
-            {
-                bill.categories = new List<Category>();
-            }
-            bill.categories.Add(category);
-        }
-
-        public Category CreateNewCategory(string name)
-        {
-            return new Category(name);
-        }
-
 
         public Category GetCategoryByName(Bill bill, string name)
         {
@@ -40,9 +25,27 @@ namespace BLL
             throw new CategoryNameInvalidException();
         }
 
+        public Category CreateNewCategory(string name)
+        {
+            return new Category(name);
+        }
+
+
+        public void AddCategory(Bill bill, Category category)
+        {
+            if (bill.categories == null)
+            {
+                bill.categories = new List<Category>();
+            }
+            bill.categories.Add(category);
+        }
+
         public void DeleteCategory(Bill bill, Category category)
         {
-            bill.categories.Remove(category);
+            if(bill.categories != null)
+            {
+                bill.categories.Remove(category);
+            }
         }
 
         public void ChangeCategory(Bill bill, string oldName, string newName)
@@ -51,7 +54,7 @@ namespace BLL
             {
                 if (b.Name.Equals(oldName))
                 {
-                    b.Name = oldName;
+                    b.Name = newName;
                 }
             }
         }

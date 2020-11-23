@@ -1,5 +1,6 @@
 ﻿using DAL;
 using System;
+using System.Collections.Generic;
 
 namespace BLL
 {
@@ -53,7 +54,6 @@ namespace BLL
             }
         }
 
-
         public void DeleteEvent()
         {
             try
@@ -84,6 +84,5 @@ namespace BLL
                 Console.WriteLine(e.Message);
             }
         }
-
     }
 }

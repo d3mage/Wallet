@@ -1,6 +1,7 @@
 ﻿using BLL;
 using DAL;
 using Moq;
+using System;
 using System.Collections.Generic;
 using Xunit;
 
@@ -214,10 +215,71 @@ namespace Wallet.Tests.BLL.Tests
             Assert.Throws<InsufficientFundsException>(() => service.ChangeBillMoney(bill, moneyEvent));
         }
 
+        [Theory]
+        [InlineData(3, 9, 300, -300)]
+        [InlineData(4, 10, 0, -300)]
+        [InlineData(3, 4, 300, 0)]
+        public void GetMoneyInRange_Success(int month1, int month2, double expectedProfit, double expectedExpense)
+        {
+            List<Bill> data = GetList();
+            Bill bill = data[0];
+
+            DateTime startDate = new DateTime(2020, month1, 14);
+            DateTime endDate = new DateTime(2020, month2, 22);
+
+            double profits,  expenses;
+
+            BillService billService = new BillService(null);
+            billService.GetMoneyInRange(bill, startDate, endDate, out profits, out expenses);
+
+            Assert.Equal(expectedProfit, profits);
+            Assert.Equal(expectedExpense, expenses); 
+        }
+
+        [Theory]
+        [InlineData(3, 15, 300, 0)]
+        [InlineData(8, 30, 0, -300)]
+        [InlineData(3, 4, 0, 0)]
+        public void GetMoneyByDate_Success(int month, int day, double expectedProfit, double expectedExpense)
+        {
+            List<Bill> data = GetList();
+            Bill bill = data[0];
+
+            DateTime date = new DateTime(2020, month, day);
+
+            double profits,  expenses;
+
+            BillService billService = new BillService(null);
+            billService.GetMoneyByDate(bill, date, out profits, out expenses);
+
+            Assert.Equal(expectedProfit, profits);
+            Assert.Equal(expectedExpense, expenses); 
+        }
+        
+        [Fact]
+        public void GetMoneyByCategory_Success()
+        {
+            List<Bill> data = GetList();
+            Bill bill = data[0];
+
+            double profits,  expenses;
+
+            BillService billService = new BillService(null);
+            billService.GetMoneyByCategory(bill, "work", out profits, out expenses);
+
+            Assert.Equal(300, profits);
+            Assert.Equal(-300, expenses); 
+        }
+
         public List<Bill> GetList()
         {
+            DateTime profitTime = new DateTime(2020, 3, 15);
+            DateTime expenseTime = new DateTime(2020, 8, 30); 
             MoneyEvent profit = new MoneyEvent(false, "worked", 300);
             MoneyEvent expense = new MoneyEvent(true, "relaxed", 300);
+            profit.Date = profitTime;
+            expense.Date = expenseTime;
+
             List<MoneyEvent> moneyEvents = new List<MoneyEvent>() { profit, expense };
 
             Category category = new Category("work");
@@ -230,6 +292,5 @@ namespace Wallet.Tests.BLL.Tests
             List<Bill> toReturn = new List<Bill>() { bill };
             return toReturn;
         }
-
     }
 }

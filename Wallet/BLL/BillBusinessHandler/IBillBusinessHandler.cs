@@ -6,5 +6,8 @@
         public void DeleteBill();
         public void ChangeNameOfBill();
         public int ShowCurrentAccounts();
+        public void TransferMoney();
+        public void SearchByDate(); 
+        public void SearchByCategory();
     }
 }

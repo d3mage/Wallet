@@ -1,7 +1,7 @@
-﻿using PL;
-using BLL;
+﻿using BLL;
 using DAL;
 using DAL.Provider;
+using PL;
 namespace Wallet
 {
     class Program
@@ -9,7 +9,7 @@ namespace Wallet
         static void Main(string[] args)
         {
             VerifyInputService verifyInputService = new VerifyInputService();
-            ReadUserInputService readUserInputService = new ReadUserInputService(); 
+            ReadUserInputService readUserInputService = new ReadUserInputService();
             GetInputService getInputService = new GetInputService(readUserInputService, verifyInputService);
 
             XmlProvider<Bill> xmlProvider = new XmlProvider<Bill>();

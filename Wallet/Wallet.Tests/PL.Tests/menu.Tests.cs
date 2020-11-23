@@ -13,28 +13,30 @@ namespace Wallet.Tests.PAL.Tests
             var mock = new Mock<IGetInputService>();
             mock.Setup(x => x.GetVerifiedInput(@"[A-Za-z]{3,10}")).Returns("exit");
 
-            Menu menu = new Menu(mock.Object, null, null);
+            Menu menu = new Menu(mock.Object, null, null, null);
             int actual = menu.Print();
 
             Assert.Equal(1, actual);
         }
 
         [Fact]
-        public void MenuCall_CallsSecondaryMenyAdd()
+        public void MenuCall_AddBill()
         {
-            var inputMock = new Mock<IGetInputService>();
-            inputMock.SetupSequence(x => x.GetVerifiedInput(@"[A-Za-z]{3,10}"))
+            var mock = new Mock<IGetInputService>();
+            mock.SetupSequence(x => x.GetVerifiedInput(@"[A-Za-z]{3,10}"))
                 .Returns("add")
-                .Returns("bill");
+                .Returns("bill")
+                .Returns("exit");
 
-            var handlerMock = new Mock<IBillBusinessHandler>();
-            handlerMock.Setup(x => x.AddBill());
+            var billMock = new Mock<IBillBusinessHandler>();
+            billMock.Setup(x => x.AddBill()).Verifiable();
 
-            Menu menu = new Menu(inputMock.Object, handlerMock.Object, null);
-
+            Menu menu = new Menu(mock.Object, billMock.Object, null, null);
             menu.Print();
 
-            handlerMock.Verify(x => x.AddBill(), Times.Once);
+            billMock.Verify(x => x.AddBill(), Times.Once);
         }
+
+
     }
 }

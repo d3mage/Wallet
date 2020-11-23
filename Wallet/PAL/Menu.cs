@@ -8,14 +8,14 @@ namespace PL
         IGetInputService getInputService;
         IBillBusinessHandler businessHandler;
         ICategoryBusinessHandler categoryHandler;
-        IMoneyEventHandler moneyHandler; 
+        IMoneyEventHandler moneyHandler;
 
         public Menu(IGetInputService getInput, IBillBusinessHandler business, ICategoryBusinessHandler category, IMoneyEventHandler money)
         {
             getInputService = getInput;
             businessHandler = business;
             categoryHandler = category;
-            moneyHandler = money; 
+            moneyHandler = money;
         }
 
         public int Print()
@@ -84,7 +84,7 @@ namespace PL
                             break;
                     }
                 }
-                else if(func.Equals("change"))
+                else if (func.Equals("change"))
                 {
                     Console.WriteLine(changeMenu);
                     try
@@ -109,7 +109,7 @@ namespace PL
                 }
                 else if (func.Equals("show"))
                 {
-                    Console.WriteLine();
+                    Console.WriteLine(showMenu);
                     try
                     {
                         func = getInputService.GetVerifiedInput(@"[A-Za-z]{3,10}");
@@ -139,6 +139,6 @@ namespace PL
         private string addMenu = "What do you want to add?\nBill\nCategory\nProfit\nExpense";
         private string deleteMenu = "What do you want to delete?\nBill\nCategory\nProfit\nExpense";
         private string changeMenu = "What do you want to change?\nBill\nCategory\nProfit\nExpense";
-        private string showMenu = "What do you want to show?\nBill\nCategory\nProfit\nExpense";
+        private string showMenu = "What do you want to see?\nBill\nCategory\nProfit\nExpense";
     }
 }

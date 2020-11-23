@@ -21,15 +21,16 @@ namespace BLL
 
         public MoneyEvent GetEventByName(Category category, string name)
         {
-            foreach(var c in category.moneyEvents)
+            foreach (var c in category.moneyEvents)
             {
                 if (c.Description.Equals(name)) return c;
             }
-            throw new MoneyEventNameInvalidException(); 
+            throw new MoneyEventNameInvalidException();
         }
         public void DeleteMoneyEvent(Category category, MoneyEvent moneyEvent)
         {
-            category.moneyEvents.Remove(moneyEvent); 
+            category.moneyEvents.Remove(moneyEvent);
         }
+
     }
 }
