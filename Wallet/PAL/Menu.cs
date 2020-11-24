@@ -107,9 +107,9 @@ namespace PL
                             break;
                     }
                 }
-                else if (func.Equals("show"))
+                else if (func.Equals("stats"))
                 {
-                    Console.WriteLine(showMenu);
+                    Console.WriteLine(statsMenu);
                     try
                     {
                         func = getInputService.GetVerifiedInput(@"[A-Za-z]{3,10}");
@@ -120,25 +120,30 @@ namespace PL
                     }
                     switch (func)
                     {
-                        case "bill":
-                            businessHandler.ShowCurrentAccounts();
+                        case "range":
+                            businessHandler.RangedSearch(); 
+                            break;
+                        case "day":
+                            businessHandler.SearchByDate(); 
                             break;
                         case "category":
-                            categoryHandler.ShowCurrentCategories();
-                            break;
-                        case "event":
+                            businessHandler.SearchByCategory(); 
                             break;
                     }
+                }
+                else if(func.Equals("transfer"))
+                {
+                    businessHandler.TransferMoney(); 
                 }
             }
             return 1;
         }
 
 
-        private string _menuEntry = "What do you want to do?\nAdd\nDelete\nChange info\nGenerate data stats";
+        private string _menuEntry = "What do you want to do?\n\"Add\"\n\"Delete\"\n\"Change\" info\nGenerate data \"stats\"\nTransfer money between bills";
         private string addMenu = "What do you want to add?\nBill\nCategory\nProfit\nExpense";
         private string deleteMenu = "What do you want to delete?\nBill\nCategory\nProfit\nExpense";
         private string changeMenu = "What do you want to change?\nBill\nCategory\nProfit\nExpense";
-        private string showMenu = "What do you want to see?\nBill\nCategory\nProfit\nExpense";
+        private string statsMenu = "What stats do you want to get?\nStats by date \"range\"\nStats by \"day\"\nStats by \"category\"";
     }
 }
