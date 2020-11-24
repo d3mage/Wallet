@@ -1,6 +1,7 @@
 ﻿using DAL;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace BLL
 {
@@ -125,11 +126,11 @@ namespace BLL
 
                 Console.WriteLine("Range first date: [dd-mm-yyyy]");
                 string date = inputService.GetVerifiedInput(@"(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[0-2])-(\d{4})");
-                DateTime startDate = Convert.ToDateTime(date);
+                DateTime startDate = DateTime.ParseExact(date, "dd-M-yyyy", CultureInfo.InvariantCulture);
 
                 Console.WriteLine("Range second date: [dd-mm-yyyy]");
                 date = inputService.GetVerifiedInput(@"(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[0-2])-(\d{4})");
-                DateTime endDate = Convert.ToDateTime(date);
+                DateTime endDate = DateTime.ParseExact(date, "dd-M-yyyy", CultureInfo.InvariantCulture);
 
                 double profits, expenses;
                 billService.GetMoneyInRange(bill, startDate, endDate, out profits, out expenses);
@@ -157,7 +158,7 @@ namespace BLL
 
                 Console.WriteLine("Enter date: [dd-mm-yyyy]");
                 string date = inputService.GetVerifiedInput(@"(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[0-2])-(\d{4})");
-                DateTime startDate = Convert.ToDateTime(date);
+                DateTime startDate = DateTime.ParseExact(date, "dd-M-yyyy", CultureInfo.InvariantCulture);
 
                 double profits, expenses;
                 billService.GetMoneyByDate(bill, startDate, out profits, out expenses);
