@@ -36,7 +36,7 @@ namespace BLL
             List<Bill> data = readWriteService.ReadData();
             foreach (var d in data)
             {
-                if (d.Name.ToLower().Equals(name)) return d;
+                if (d.Name.Equals(name)) return d;
             }
             throw new BillNameInvalidException();
         }
@@ -104,20 +104,35 @@ namespace BLL
             }
             else throw new BillsNotInitializedException();
         }
-        public void PrintBills()
+
+        public List<string> GetBillsToPrint()
         {
             List<Bill> data = readWriteService.ReadData();
+            List<string> toReturn = new List<string>(); 
             foreach (var d in data)
             {
-                Console.WriteLine(d.Name);
+                toReturn.Add(d.Name); 
             }
+            return toReturn; 
         }
 
-        public void ChangeBillMoney(Bill bill, MoneyEvent moneyEvent)
+        public void TransferMoney(string fName, string sName, double value)
+        {
+            MoneyEvent expenseEvent = new MoneyEvent(true, $"Transfer to {sName}", "Transfer", value);
+            MoneyEvent profitEvent = new MoneyEvent(false, $"Transfer from {fName}", "Transfer", value);
+
+            Bill fBill = GetBillByName(fName);
+            Bill sBill = GetBillByName(sName);
+
+            ChangeBillMoney(fBill, expenseEvent);
+            ChangeBillMoney(sBill, profitEvent); 
+        }
+
+        private void ChangeBillMoney(Bill bill, MoneyEvent moneyEvent)
         {
             if (moneyEvent.isExpense != true)
             {
-                Double tempMoney = bill.Money;
+                double tempMoney = bill.Money;
                 tempMoney += moneyEvent.Value;
                 bill.Money = tempMoney;
             }
@@ -127,7 +142,7 @@ namespace BLL
                     throw new InsufficientFundsException();
                 else
                 {
-                    Double tempMoney = bill.Money;
+                    double tempMoney = bill.Money;
                     tempMoney -= moneyEvent.Value;
                     bill.Money = tempMoney;
                 }

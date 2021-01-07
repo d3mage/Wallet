@@ -104,8 +104,8 @@ namespace BLL
                 Console.WriteLine("Enter ammount of money you want to transfer: ");
                 double ammount = Convert.ToDouble(inputService.GetVerifiedInput(@"[0-9]+"));
 
-                billService.ChangeBillMoney(transferFrom, new MoneyEvent(true, "transfer money", ammount));
-                billService.ChangeBillMoney(transferTo, new MoneyEvent(false, "transfer money", ammount));
+                billService.TransferMoney(transferFrom, new MoneyEvent(true, "transfer money", ammount));
+                billService.TransferMoney(transferTo, new MoneyEvent(false, "transfer money", ammount));
 
             }
             catch (Exception e) when (e is EmptyListException ||

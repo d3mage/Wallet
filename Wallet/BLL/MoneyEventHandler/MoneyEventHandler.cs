@@ -42,7 +42,7 @@ namespace BLL
                 MoneyEvent moneyEvent = moneyService.GetNewMoneyExpense(isExpense, profitName, money);
                 moneyService.AddMoneyEvent(category, moneyEvent);
 
-                billService.ChangeBillMoney(bill, moneyEvent);
+                billService.TransferMoney(bill, moneyEvent);
                 billService.ChangeBillInList(bill);
 
             }

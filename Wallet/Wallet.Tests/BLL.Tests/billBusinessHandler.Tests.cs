@@ -187,8 +187,8 @@ namespace Wallet.Tests.BLL.Tests
             BillBusinessHandler billBusinessHandler = new BillBusinessHandler(inputServiceMock.Object, billServiceMock.Object);
             billBusinessHandler.TransferMoney();
 
-            billServiceMock.Verify(x => x.ChangeBillMoney(work, It.IsAny<MoneyEvent>()), Times.Once);
-            billServiceMock.Verify(x => x.ChangeBillMoney(notWork, It.IsAny<MoneyEvent>()), Times.Once);
+            billServiceMock.Verify(x => x.TransferMoney(work, It.IsAny<MoneyEvent>()), Times.Once);
+            billServiceMock.Verify(x => x.TransferMoney(notWork, It.IsAny<MoneyEvent>()), Times.Once);
         }
 
         [Fact]
@@ -208,8 +208,8 @@ namespace Wallet.Tests.BLL.Tests
             BillBusinessHandler billBusinessHandler = new BillBusinessHandler(inputServiceMock.Object, billServiceMock.Object);
             billBusinessHandler.TransferMoney();
 
-            billServiceMock.Verify(x => x.ChangeBillMoney(work, It.IsAny<MoneyEvent>()), Times.Never);
-            billServiceMock.Verify(x => x.ChangeBillMoney(notWork, It.IsAny<MoneyEvent>()), Times.Never);
+            billServiceMock.Verify(x => x.TransferMoney(work, It.IsAny<MoneyEvent>()), Times.Never);
+            billServiceMock.Verify(x => x.TransferMoney(notWork, It.IsAny<MoneyEvent>()), Times.Never);
         }
 
         [Fact]

@@ -1,21 +1,31 @@
 ﻿using BLL;
 using System;
+using System.Collections.Generic;
 
 namespace PL
 {
     public class Menu
     {
-        IGetInputService getInputService;
+        IGetInputService inputService;
+
         IBillBusinessHandler businessHandler;
         ICategoryBusinessHandler categoryHandler;
         IMoneyEventHandler moneyHandler;
 
-        public Menu(IGetInputService getInput, IBillBusinessHandler business, ICategoryBusinessHandler category, IMoneyEventHandler money)
+        IBillService billService;
+
+        //public Menu(IGetInputService getInput, IBillBusinessHandler business, ICategoryBusinessHandler category, IMoneyEventHandler money)
+        //{
+        //    getInputService = getInput;
+        //    businessHandler = business;
+        //    categoryHandler = category;
+        //    moneyHandler = money;
+        //}
+
+        public Menu(IGetInputService input, IBillService bill)
         {
-            getInputService = getInput;
-            businessHandler = business;
-            categoryHandler = category;
-            moneyHandler = money;
+            inputService = input; 
+            billService = bill; 
         }
 
         public int Print()
@@ -27,7 +37,7 @@ namespace PL
                 Console.WriteLine(_menuEntry);
                 try
                 {
-                    func = getInputService.GetVerifiedInput(@"[A-Za-z]{3,10}");
+                    func = inputService.GetVerifiedInput(@"[A-Za-z]{3,10}");
                 }
                 catch (TooManyFalseAttemptsException e)
                 {
@@ -35,110 +45,168 @@ namespace PL
                 }
                 if (func.Equals("add"))
                 {
-                    Console.WriteLine(addMenu);
-                    try
-                    {
-                        func = getInputService.GetVerifiedInput(@"[A-Za-z]{3,10}");
-                    }
-                    catch (TooManyFalseAttemptsException e)
-                    {
-                        Console.WriteLine(e.Message);
-                    }
-                    switch (func)
-                    {
-                        case "bill":
-                            businessHandler.AddBill();
-                            break;
-                        case "category":
-                            categoryHandler.AddCategory();
-                            break;
-                        case "profit":
-                            moneyHandler.AddNewEvent(false);
-                            break;
-                        case "expense":
-                            moneyHandler.AddNewEvent(true);
-                            break;
-                    }
+                    AddMenu(); 
                 }
                 else if (func.Equals("delete"))
                 {
-                    Console.WriteLine(deleteMenu);
-                    try
-                    {
-                        func = getInputService.GetVerifiedInput(@"[A-Za-z]{3,10}");
-                    }
-                    catch (TooManyFalseAttemptsException e)
-                    {
-                        Console.WriteLine(e.Message);
-                    }
-                    switch (func)
-                    {
-                        case "bill":
-                            businessHandler.DeleteBill();
-                            break;
-                        case "category":
-                            categoryHandler.DeleteCategory();
-                            break;
-                        case "event":
-                            moneyHandler.DeleteEvent();
-                            break;
-                    }
+                    DeleteMenu(); 
                 }
                 else if (func.Equals("change"))
                 {
-                    Console.WriteLine(changeMenu);
-                    try
-                    {
-                        func = getInputService.GetVerifiedInput(@"[A-Za-z]{3,10}");
-                    }
-                    catch (TooManyFalseAttemptsException e)
-                    {
-                        Console.WriteLine(e.Message);
-                    }
-                    switch (func)
-                    {
-                        case "bill":
-                            businessHandler.ChangeNameOfBill();
-                            break;
-                        case "category":
-                            categoryHandler.ChangeCategory();
-                            break;
-                        case "event":
-                            break;
-                    }
+                    ChangeMenu(); 
                 }
                 else if (func.Equals("stats"))
                 {
-                    Console.WriteLine(statsMenu);
-                    try
-                    {
-                        func = getInputService.GetVerifiedInput(@"[A-Za-z]{3,10}");
-                    }
-                    catch (TooManyFalseAttemptsException e)
-                    {
-                        Console.WriteLine(e.Message);
-                    }
-                    switch (func)
-                    {
-                        case "range":
-                            businessHandler.RangedSearch(); 
-                            break;
-                        case "day":
-                            businessHandler.SearchByDate(); 
-                            break;
-                        case "category":
-                            businessHandler.SearchByCategory(); 
-                            break;
-                    }
+                    StatsMenu(); 
                 }
                 else if(func.Equals("transfer"))
                 {
-                    businessHandler.TransferMoney(); 
+                    TransferMenu(); 
                 }
             }
             return 1;
         }
 
+        private void AddMenu()
+        {
+            string func = ""; 
+            Console.WriteLine(addMenu);
+            try
+            {
+                func = inputService.GetVerifiedInput(@"[A-Za-z]{3,10}");
+            }
+            catch (TooManyFalseAttemptsException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            if(func.Equals("bill"))
+            {
+                businessHandler.AddBill();
+            }
+            else if(func.Equals("profit"))
+            {
+                moneyHandler.AddNewEvent(false);
+            }
+            else if (func.Equals("expense"))
+            {
+                moneyHandler.AddNewEvent(true);
+            }
+            else if(func.Equals(""))
+            {
+                return; 
+            }
+        }
+        private void DeleteMenu()
+        {
+            string func = "";
+            Console.WriteLine(deleteMenu);
+            try
+            {
+                func = inputService.GetVerifiedInput(@"[A-Za-z]{3,10}");
+            }
+            catch (TooManyFalseAttemptsException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            if (func.Equals("bill"))
+            {
+                businessHandler.DeleteBill();
+            }
+            else if(func.Equals("category"))
+            {
+                categoryHandler.DeleteCategory();
+            }
+            else if (func.Equals("event"))
+            {
+                moneyHandler.DeleteEvent();
+            }
+            else if (func.Equals(""))
+            {
+                return;
+            }
+        }
+        private void ChangeMenu()
+        {
+            string func = "";
+            Console.WriteLine(changeMenu);
+            try
+            {
+                func = inputService.GetVerifiedInput(@"[A-Za-z]{3,10}");
+            }
+            catch (TooManyFalseAttemptsException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            if (func.Equals("bill"))
+            {
+                businessHandler.ChangeNameOfBill();
+            }
+            else if (func.Equals("category"))
+            {
+                categoryHandler.ChangeCategory();
+            }
+            else if (func.Equals("event"))
+            {
+               
+            }
+            else if (func.Equals(""))
+            {
+                return;
+            }
+        }
+        private void StatsMenu()
+        {
+            string func = "";
+            Console.WriteLine(statsMenu);
+            try
+            {
+                func = inputService.GetVerifiedInput(@"[A-Za-z]{3,10}");
+            }
+            catch (TooManyFalseAttemptsException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            if (func.Equals("range"))
+            {
+                businessHandler.RangedSearch();
+            }
+            else if (func.Equals("day"))
+            {
+                businessHandler.SearchByDate();
+            }
+            else if (func.Equals("category"))
+            {
+                businessHandler.SearchByCategory();
+            }
+            else if (func.Equals(""))
+            {
+                return;
+            }
+        }
+        private void TransferMenu()
+        {
+            try
+            {
+                List<string> currentBills = billService.GetBillsToPrint();
+                Printer.Print(currentBills); 
+
+                Console.WriteLine("Enter name of bill you want to transfer money from: ");
+                string firstBillName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+                Console.WriteLine("Enter name of bill you want to transfer money to: ");
+                string secondBillName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+                Console.WriteLine("Enter ammount of money you want to transfer: ");
+                double ammount = Convert.ToDouble(inputService.GetVerifiedInput(@"[0-9]+"));
+
+                billService.TransferMoney(firstBillName, secondBillName, ammount); 
+            }
+            catch (Exception e) when (/*e is EmptyListException ||*/
+            e is TooManyFalseAttemptsException || e is BillNameInvalidException)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
 
         private string _menuEntry = "What do you want to do?\n\"Add\"\n\"Delete\"\n\"Change\" info\nGenerate data \"stats\"\nTransfer money between bills";
         private string addMenu = "What do you want to add?\nBill\nCategory\nProfit\nExpense";
