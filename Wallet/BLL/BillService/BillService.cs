@@ -12,16 +12,27 @@ namespace BLL
             readWriteService = readWrite;
         }
 
-        public bool isBillNameAvailable(string name)
+        private List<Bill> ReadList()
         {
-            List<Bill> data;
+            List<Bill> data; 
             try
             {
-                data = readWriteService.ReadData();
+                data = readWriteService.ReadData(); 
             }
             catch (EmptyListException e)
             {
-                return true;
+                data = new List<Bill>(); 
+            }
+            return data; 
+        }
+
+        public bool isBillNameAvailable(string name)
+        {
+            List<Bill> data = ReadList();
+
+           if(data.Count == 0)
+            {
+                return true; 
             }
             foreach (var d in data)
             {
@@ -33,7 +44,7 @@ namespace BLL
 
         public Bill GetBillByName(string name)
         {
-            List<Bill> data = readWriteService.ReadData();
+            List<Bill> data = ReadList();
             foreach (var d in data)
             {
                 if (d.Name.Equals(name)) return d;
@@ -48,23 +59,14 @@ namespace BLL
 
         public void AddBill(Bill bill)
         {
-            List<Bill> data = new List<Bill>();
-            try
-            {
-                data = readWriteService.ReadData();
-            }
-            catch (Exception e) { }
-            finally
-            {
-                data.Add(bill);
-                readWriteService.WriteData(data);
-            }
-
+            List<Bill> data = ReadList();
+            data.Add(bill);
+            readWriteService.WriteData(data);
         }
 
         public void DeleteBill(Bill bill)
         {
-            List<Bill> data = readWriteService.ReadData();
+            List<Bill> data = ReadList(); 
             data.Remove(bill);
             readWriteService.WriteData(data);
         }
@@ -72,7 +74,7 @@ namespace BLL
 
         public void ChangeBillInfo(string oldName, string newName)
         {
-            List<Bill> data = readWriteService.ReadData();
+            List<Bill> data = ReadList();
             foreach (var d in data)
             {
                 if (d.Name.ToLower().Equals(oldName))
@@ -84,7 +86,7 @@ namespace BLL
         }
         public void ChangeBillInList(Bill bill)
         {
-            List<Bill> data = readWriteService.ReadData();
+            List<Bill> data = ReadList();
             foreach (var d in data)
             {
                 if (d.Name.ToLower().Equals(bill.Name))

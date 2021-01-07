@@ -81,6 +81,9 @@ namespace PL
             }
             if(func.Equals("bill"))
             {
+                Console.WriteLine("Enter name of bill: ");
+                string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
                 businessHandler.AddBill();
             }
             else if(func.Equals("profit"))

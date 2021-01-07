@@ -85,16 +85,12 @@ namespace Wallet.Tests.DAL.Tests
 
         public List<Bill> GetList()
         {
-            MoneyEvent profit = new MoneyEvent(false, "worked", 300);
-            MoneyEvent expense = new MoneyEvent(true, "relaxed", 300);
+            MoneyEvent profit = new MoneyEvent(false, "worked", "work",  300);
+            MoneyEvent expense = new MoneyEvent(true, "relaxed", "work", 300);
             List<MoneyEvent> moneyEvents = new List<MoneyEvent>() { profit, expense };
 
-            Category category = new Category("work");
-            category.moneyEvents = moneyEvents;
-            List<Category> categories = new List<Category>() { category };
-
             Bill bill = new Bill("work bill", 800);
-            bill.categories = categories;
+            bill.moneyEvents = moneyEvents; 
 
             List<Bill> toReturn = new List<Bill>() { bill };
             return toReturn;

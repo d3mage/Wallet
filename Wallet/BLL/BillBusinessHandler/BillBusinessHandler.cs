@@ -19,10 +19,8 @@ namespace BLL
         public void AddBill()
         {
             double money = 150;
-            Console.WriteLine("Enter name of bill: ");
             try
             {
-                string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
                 bool available = billService.isBillNameAvailable(name);
                 if (available != true) throw new BillNameInvalidException();
                 billService.AddBill(billService.CreateNewBill(name, money));
