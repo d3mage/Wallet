@@ -6,7 +6,8 @@ namespace BLL
 {
     public class BillService : IBillService
     {
-        public IReadWriteService readWriteService;
+        private IReadWriteService readWriteService;
+
         public BillService(IReadWriteService readWrite)
         {
             readWriteService = readWrite;
@@ -18,7 +19,7 @@ namespace BLL
             if (isAvailable == true)
             {
                 Bill bill = CreateNewBill(name);
-                List<Bill> data = ReadList();
+                List<Bill> data = readWriteService.ReadData();
                 data.Add(bill);
                 readWriteService.WriteData(data);
             }
@@ -29,7 +30,7 @@ namespace BLL
             bool isAvailable = isBillNameAvailable(name);
             if (isAvailable != true)
             {
-                List<Bill> data = ReadList();
+                List<Bill> data = readWriteService.ReadData();
                 Bill bill = GetBillByName(name);
                 data.Remove(bill);
                 readWriteService.WriteData(data);
@@ -41,7 +42,7 @@ namespace BLL
             bool isAvailable = isBillNameAvailable(name);
             if (isAvailable != true)
             {
-                List<Bill> data = ReadList();
+                List<Bill> data = readWriteService.ReadData();
                 foreach (var d in data)
                 {
                     if (d.Name.ToLower().Equals(name))
@@ -53,20 +54,7 @@ namespace BLL
             }
             else throw new BillNameInvalidException();
         }
-        private List<Bill> ReadList()
-        {
-            List<Bill> data; 
-            try
-            {
-                data = readWriteService.ReadData(); 
-            }
-            catch (EmptyListException e)
-            {
-                data = new List<Bill>(); 
-            }
-            return data; 
-        }
-
+ 
         private bool isBillNameAvailable(string name)
         {
             Bill billToCheck = GetBillByName(name);
@@ -79,7 +67,7 @@ namespace BLL
 
         private Bill GetBillByName(string name)
         {
-            List<Bill> data = ReadList();
+            List<Bill> data = readWriteService.ReadData();
             foreach (var d in data)
             {
                 if (d.Name.Equals(name)) return d;
@@ -95,7 +83,7 @@ namespace BLL
        
         public void ChangeBillInList(Bill bill)
         {
-            List<Bill> data = ReadList();
+            List<Bill> data = readWriteService.ReadData();
             foreach (var d in data)
             {
                 if (d.Name.ToLower().Equals(bill.Name))
@@ -164,24 +152,21 @@ namespace BLL
         {
             double tempProfits = 0, tempExpenses = 0;
 
-            foreach (var c in bill.categories)
+            foreach (var m in bill.moneyEvents)
             {
-                foreach (var m in c.moneyEvents)
+                if (DateTime.Compare(startDate, m.Date) < 0 && DateTime.Compare(endDate, m.Date) > 0)
                 {
-                    if (DateTime.Compare(startDate, m.Date) < 0 && DateTime.Compare(endDate, m.Date) > 0)
+                    if (m.isExpense == false)
                     {
-                        if (m.isExpense == false)
-                        {
-                            tempProfits += m.Value;
-                        }
-                        else
-                        {
-                            tempExpenses -= m.Value;
-                        }
-                        Console.WriteLine(m.ToString());
+                        tempProfits += m.Value;
                     }
-                    else if (DateTime.Compare(endDate, m.Date) <= 0) break;
+                    else
+                    {
+                        tempExpenses -= m.Value;
+                    }
+                    Console.WriteLine(m.ToString());
                 }
+                else if (DateTime.Compare(endDate, m.Date) <= 0) break;
             }
             profits = tempProfits;
             expenses = tempExpenses; 
@@ -191,24 +176,21 @@ namespace BLL
         {
             double tempProfits = 0, tempExpenses = 0;
 
-            foreach (var c in bill.categories)
+            foreach (var m in bill.moneyEvents)
             {
-                foreach (var m in c.moneyEvents)
+                if (DateTime.Compare(date, m.Date) == 0)
                 {
-                    if (DateTime.Compare(date, m.Date) == 0)
+                    if (m.isExpense == false)
                     {
-                        if (m.isExpense == false)
-                        {
-                            tempProfits += m.Value;
-                        }
-                        else
-                        {
-                            tempExpenses -= m.Value;
-                        }
-                        Console.WriteLine(m.ToString());
+                        tempProfits += m.Value;
                     }
-                    else if (DateTime.Compare(date, m.Date) <= 0) break;
+                    else
+                    {
+                        tempExpenses -= m.Value;
+                    }
+                    Console.WriteLine(m.ToString());
                 }
+                else if (DateTime.Compare(date, m.Date) <= 0) break;
             }
             profits = tempProfits;
             expenses = tempExpenses; 

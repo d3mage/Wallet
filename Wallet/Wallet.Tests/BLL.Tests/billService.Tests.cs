@@ -10,6 +10,47 @@ namespace Wallet.Tests.BLL.Tests
     public class BillService_Tests
     {
         [Fact]
+        public void AddBill_Success()
+        {
+            List<Bill> data = GetList();
+
+            var mock = new Mock<IReadWriteService>();
+            mock.Setup(x => x.ReadData()).Returns(data);
+            mock.Setup(x => x.WriteData(data)).Verifiable();
+
+            Bill testBill = new Bill("work bill", 800);
+            BillService service = new BillService(mock.Object);
+
+            service.AddBill(testBill);
+
+            mock.Verify(x => x.WriteData(data), Times.Once);
+            Assert.Contains(testBill, data);
+        }
+
+        [Fact]
+        public void AddBill_ThrowsException()
+        {
+            List<Bill> data = new List<Bill>();
+
+            var mock = new Mock<IReadWriteService>();
+            mock.Setup(x => x.ReadData()).Throws<EmptyListException>();
+            mock.Setup(x => x.WriteData(data)).Verifiable();
+
+            Bill testBill = new Bill("work bill", 800);
+            BillService service = new BillService(mock.Object);
+            data.Add(testBill);
+
+            service.AddBill(testBill);
+
+            mock.Verify(x => x.WriteData(data), Times.Once);
+        }
+
+
+
+
+
+
+        [Fact]
         public void isBillNameAvailable_False()
         {
             List<Bill> data = GetList();
@@ -71,41 +112,7 @@ namespace Wallet.Tests.BLL.Tests
             Assert.Throws<BillNameInvalidException>(() => service.GetBillByName("test bill"));
         }
 
-        [Fact]
-        public void AddBill_Success()
-        {
-            List<Bill> data = GetList();
-
-            var mock = new Mock<IReadWriteService>();
-            mock.Setup(x => x.ReadData()).Returns(data);
-            mock.Setup(x => x.WriteData(data)).Verifiable();
-
-            Bill testBill = new Bill("work bill", 800);
-            BillService service = new BillService(mock.Object);
-
-            service.AddBill(testBill);
-
-            mock.Verify(x => x.WriteData(data), Times.Once);
-            Assert.Contains(testBill, data);
-        }
-
-        [Fact]
-        public void AddBill_ThrowsException()
-        {
-            List<Bill> data = new List<Bill>();
-
-            var mock = new Mock<IReadWriteService>();
-            mock.Setup(x => x.ReadData()).Throws<EmptyListException>();
-            mock.Setup(x => x.WriteData(data)).Verifiable();
-
-            Bill testBill = new Bill("work bill", 800);
-            BillService service = new BillService(mock.Object);
-            data.Add(testBill);
-
-            service.AddBill(testBill);
-
-            mock.Verify(x => x.WriteData(data), Times.Once);
-        }
+        
 
         [Fact]
         public void DeleteBill_Success()
@@ -273,21 +280,12 @@ namespace Wallet.Tests.BLL.Tests
 
         public List<Bill> GetList()
         {
-            DateTime profitTime = new DateTime(2020, 3, 15);
-            DateTime expenseTime = new DateTime(2020, 8, 30); 
-            MoneyEvent profit = new MoneyEvent(false, "worked", 300);
-            MoneyEvent expense = new MoneyEvent(true, "relaxed", 300);
-            profit.Date = profitTime;
-            expense.Date = expenseTime;
-
+            MoneyEvent profit = new MoneyEvent(false, "worked", "work", 300);
+            MoneyEvent expense = new MoneyEvent(true, "relaxed", "work", 300);
             List<MoneyEvent> moneyEvents = new List<MoneyEvent>() { profit, expense };
 
-            Category category = new Category("work");
-            category.moneyEvents = moneyEvents;
-            List<Category> categories = new List<Category>() { category };
-
             Bill bill = new Bill("work bill", 800);
-            bill.categories = categories;
+            bill.moneyEvents = moneyEvents;
 
             List<Bill> toReturn = new List<Bill>() { bill };
             return toReturn;
