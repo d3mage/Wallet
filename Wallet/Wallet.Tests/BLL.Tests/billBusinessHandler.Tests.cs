@@ -118,7 +118,7 @@ namespace Wallet.Tests.BLL.Tests
             BillBusinessHandler businessHandler = new BillBusinessHandler(inputServiceMock.Object, billServiceMock.Object);
             businessHandler.ChangeNameOfBill();
 
-            billServiceMock.Verify(x => x.ChangeBillInfo("work bill", "not work bill"), Times.Once);
+            billServiceMock.Verify(x => x.ChangeBillName("work bill", "not work bill"), Times.Once);
         }
         [Fact]
         public void ChangeBill_NameUnavailable()
@@ -135,7 +135,7 @@ namespace Wallet.Tests.BLL.Tests
             BillBusinessHandler businessHandler = new BillBusinessHandler(inputServiceMock.Object, billServiceMock.Object);
             businessHandler.ChangeNameOfBill();
 
-            billServiceMock.Verify(x => x.ChangeBillInfo("work bill", "not work bill"), Times.Never);
+            billServiceMock.Verify(x => x.ChangeBillName("work bill", "not work bill"), Times.Never);
         }
 
         [Fact]

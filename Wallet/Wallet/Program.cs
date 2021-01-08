@@ -24,7 +24,7 @@ namespace Wallet
             MoneyEventService moneyEventService = new MoneyEventService();
             MoneyEventHandler moneyEventHandler = new MoneyEventHandler(getInputService, billService, categoryService, moneyEventService);
 
-            Menu menu = new Menu(getInputService, billBusinessHandler, categoryBusinessHandler, moneyEventHandler);
+            Menu menu = new Menu(getInputService, billService);
             menu.Print();
         }
     }

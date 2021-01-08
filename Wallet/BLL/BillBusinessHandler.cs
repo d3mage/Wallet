@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace BLL
 {
-    public class BillBusinessHandler : IBillBusinessHandler
+    public class BillBusinessHandler 
     {
         private IGetInputService inputService;
         private IBillService billService;
@@ -16,57 +16,7 @@ namespace BLL
             billService = bill;
         }
 
-        public void AddBill()
-        {
-            double money = 150;
-            try
-            {
-                bool available = billService.isBillNameAvailable(name);
-                if (available != true) throw new BillNameInvalidException();
-                billService.AddBill(billService.CreateNewBill(name, money));
-            }
-            catch (Exception e) when (e is EmptyListException ||
-            e is TooManyFalseAttemptsException || e is BillNameInvalidException)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
-        public void DeleteBill()
-        {
-            Console.WriteLine("Enter the name of bill you want to delete: ");
-            try
-            {
-                billService.PrintBills();
-                string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
-                Bill bill = billService.GetBillByName(name);
-                billService.DeleteBill(bill);
-            }
-            catch (Exception e) when (e is EmptyListException ||
-            e is TooManyFalseAttemptsException || e is BillNameInvalidException)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
-        public void ChangeNameOfBill()
-        {
-            Console.WriteLine("Enter name of bill you want to change: ");
-            try
-            {
-                billService.PrintBills();
-                string oldName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
-                bool available = billService.isBillNameAvailable(oldName);
-                if (available == true) throw new BillNameInvalidException();
-
-                Console.WriteLine("Enter new name: ");
-                string newName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
-                billService.ChangeBillInfo(oldName, newName);
-            }
-            catch (Exception e) when (e is EmptyListException ||
-            e is TooManyFalseAttemptsException || e is BillNameInvalidException)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
+       
         public int ShowCurrentAccounts()
         {
             try
@@ -86,39 +36,12 @@ namespace BLL
             return -1;
         }
 
-        public void TransferMoney()
-        {
-            Console.WriteLine("Enter name of bill you want to transfer money from: ");
-            try
-            {
-                billService.PrintBills();
-                string firstBillName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
-                Bill transferFrom = billService.GetBillByName(firstBillName);
-
-                Console.WriteLine("Enter name of bill you want to transfer money to: ");
-                string secondBillName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
-                Bill transferTo = billService.GetBillByName(secondBillName);
-
-                Console.WriteLine("Enter ammount of money you want to transfer: ");
-                double ammount = Convert.ToDouble(inputService.GetVerifiedInput(@"[0-9]+"));
-
-                billService.TransferMoney(transferFrom, new MoneyEvent(true, "transfer money", ammount));
-                billService.TransferMoney(transferTo, new MoneyEvent(false, "transfer money", ammount));
-
-            }
-            catch (Exception e) when (e is EmptyListException ||
-            e is TooManyFalseAttemptsException || e is BillNameInvalidException)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
 
         public void RangedSearch()
         {
             Console.WriteLine("Enter the bill you want to get ranged stats about:  ");
             try
             {
-                billService.PrintBills();
                 string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
                 Bill bill = billService.GetBillByName(name);
 
@@ -150,7 +73,6 @@ namespace BLL
             Console.WriteLine("Enter the bill you want to day stats about:  ");
             try
             {
-                billService.PrintBills();
                 string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
                 Bill bill = billService.GetBillByName(name);
 
@@ -172,13 +94,11 @@ namespace BLL
                 Console.WriteLine(e.Message);
             }
         }
-
         public void SearchByCategory()
         {
             Console.WriteLine("Enter the bill you want to day stats about:  ");
             try
             {
-                billService.PrintBills();
                 string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
                 Bill bill = billService.GetBillByName(name);
 

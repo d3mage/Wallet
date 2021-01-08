@@ -8,19 +8,7 @@ namespace PL
     {
         IGetInputService inputService;
 
-        IBillBusinessHandler businessHandler;
-        ICategoryBusinessHandler categoryHandler;
-        IMoneyEventHandler moneyHandler;
-
         IBillService billService;
-
-        //public Menu(IGetInputService getInput, IBillBusinessHandler business, ICategoryBusinessHandler category, IMoneyEventHandler money)
-        //{
-        //    getInputService = getInput;
-        //    businessHandler = business;
-        //    categoryHandler = category;
-        //    moneyHandler = money;
-        //}
 
         public Menu(IGetInputService input, IBillService bill)
         {
@@ -81,10 +69,18 @@ namespace PL
             }
             if(func.Equals("bill"))
             {
-                Console.WriteLine("Enter name of bill: ");
-                string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+                try
+                {
+                    Console.WriteLine("Enter name of bill: ");
+                    string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
 
-                businessHandler.AddBill();
+                    billService.AddBill(name);
+                }
+                catch (Exception e) when (/*e is EmptyListException ||*/
+                 e is TooManyFalseAttemptsException || e is BillNameInvalidException)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
             else if(func.Equals("profit"))
             {
@@ -113,7 +109,20 @@ namespace PL
             }
             if (func.Equals("bill"))
             {
-                businessHandler.DeleteBill();
+                try
+                {
+                    Printer.Print(billService.GetBillsNames());
+
+                    Console.WriteLine("Enter name of bill: ");
+                    string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+                    billService.DeleteBill(name);
+                }
+                catch (Exception e) when (/*e is EmptyListException ||*/
+                 e is TooManyFalseAttemptsException || e is BillNameInvalidException)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
             else if(func.Equals("category"))
             {
@@ -142,7 +151,23 @@ namespace PL
             }
             if (func.Equals("bill"))
             {
-                businessHandler.ChangeNameOfBill();
+                try
+                {
+                    Printer.Print(billService.GetBillsNames());
+
+                    Console.WriteLine("Enter name of bill you want to change: : ");
+                    string oldName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+                    Console.WriteLine("Enter new name: ");
+                    string newName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+                    billService.ChangeBillName(oldName, newName);
+                }
+                catch (Exception e) when (/*e is EmptyListException ||*/
+                 e is TooManyFalseAttemptsException || e is BillNameInvalidException)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
             else if (func.Equals("category"))
             {
@@ -190,7 +215,7 @@ namespace PL
         {
             try
             {
-                List<string> currentBills = billService.GetBillsToPrint();
+                List<string> currentBills = billService.GetBillsNames();
                 Printer.Print(currentBills); 
 
                 Console.WriteLine("Enter name of bill you want to transfer money from: ");

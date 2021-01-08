@@ -139,7 +139,7 @@ namespace Wallet.Tests.BLL.Tests
             Bill testBill = new Bill("test bill", 800);
             BillService service = new BillService(mock.Object);
 
-            service.ChangeBillInfo("work bill", "test bill");
+            service.ChangeBillName("work bill", "test bill");
 
             mock.Verify(x => x.WriteData(data), Times.Once);
             Assert.Equal(expectedList[0].Name, data[0].Name);

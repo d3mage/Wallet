@@ -12,6 +12,47 @@ namespace BLL
             readWriteService = readWrite;
         }
 
+        public void AddBill(string name)
+        {
+            bool isAvailable = isBillNameAvailable(name);
+            if (isAvailable == true)
+            {
+                Bill bill = CreateNewBill(name);
+                List<Bill> data = ReadList();
+                data.Add(bill);
+                readWriteService.WriteData(data);
+            }
+            else throw new BillNameInvalidException();
+        }
+        public void DeleteBill(string name)
+        {
+            bool isAvailable = isBillNameAvailable(name);
+            if (isAvailable != true)
+            {
+                List<Bill> data = ReadList();
+                Bill bill = GetBillByName(name);
+                data.Remove(bill);
+                readWriteService.WriteData(data);
+            }
+            else throw new BillNameInvalidException();
+        }
+        public void ChangeBillName(string name, string newName)
+        {
+            bool isAvailable = isBillNameAvailable(name);
+            if (isAvailable != true)
+            {
+                List<Bill> data = ReadList();
+                foreach (var d in data)
+                {
+                    if (d.Name.ToLower().Equals(name))
+                    {
+                        d.Name = newName;
+                    }
+                }
+                readWriteService.WriteData(data);
+            }
+            else throw new BillNameInvalidException();
+        }
         private List<Bill> ReadList()
         {
             List<Bill> data; 
@@ -26,64 +67,32 @@ namespace BLL
             return data; 
         }
 
-        public bool isBillNameAvailable(string name)
+        private bool isBillNameAvailable(string name)
         {
-            List<Bill> data = ReadList();
-
-           if(data.Count == 0)
+            Bill billToCheck = GetBillByName(name);
+            if(billToCheck == null)
             {
                 return true; 
             }
-            foreach (var d in data)
-            {
-                if (d.Name.ToLower().Equals(name)) return false;
-            }
-            return true;
+            return false; 
         }
 
-
-        public Bill GetBillByName(string name)
+        private Bill GetBillByName(string name)
         {
             List<Bill> data = ReadList();
             foreach (var d in data)
             {
                 if (d.Name.Equals(name)) return d;
             }
-            throw new BillNameInvalidException();
+            return null; 
         }
 
-        public Bill CreateNewBill(string name, double money)
+        private Bill CreateNewBill(string name)
         {
-            return new Bill(name, money);
+            return new Bill(name, 150);
         }
 
-        public void AddBill(Bill bill)
-        {
-            List<Bill> data = ReadList();
-            data.Add(bill);
-            readWriteService.WriteData(data);
-        }
-
-        public void DeleteBill(Bill bill)
-        {
-            List<Bill> data = ReadList(); 
-            data.Remove(bill);
-            readWriteService.WriteData(data);
-        }
-
-
-        public void ChangeBillInfo(string oldName, string newName)
-        {
-            List<Bill> data = ReadList();
-            foreach (var d in data)
-            {
-                if (d.Name.ToLower().Equals(oldName))
-                {
-                    d.Name = newName;
-                }
-            }
-            readWriteService.WriteData(data);
-        }
+       
         public void ChangeBillInList(Bill bill)
         {
             List<Bill> data = ReadList();
@@ -92,7 +101,7 @@ namespace BLL
                 if (d.Name.ToLower().Equals(bill.Name))
                 {
                     d.Money = bill.Money;
-                    d.categories = bill.categories;
+                    d.moneyEvents = bill.moneyEvents;
                 }
             }
             readWriteService.WriteData(data);
@@ -107,7 +116,7 @@ namespace BLL
             else throw new BillsNotInitializedException();
         }
 
-        public List<string> GetBillsToPrint()
+        public List<string> GetBillsNames()
         {
             List<Bill> data = readWriteService.ReadData();
             List<string> toReturn = new List<string>(); 
