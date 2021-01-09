@@ -4,20 +4,20 @@ using System.Collections.Generic;
 
 namespace DAL
 {
-    public class BillContext : IBillContext
+    public class DataContext<T> : IDataContext<T>
     {
-        private List<Bill> _storedData;
+        private List<T> _storedData;
 
         public string ConnectionString { get; }
-        public IProvider<Bill> DataProvider { get; set; }
+        public IProvider<T> DataProvider { get; set; }
 
-        public BillContext(IProvider<Bill> provider, string connection)
+        public DataContext(IProvider<T> provider, string connection)
         {
             DataProvider = provider;
             ConnectionString = connection;
         }
 
-        public List<Bill> GetData()
+        public List<T> GetData()
         {
             if (DataProvider != null)
             {
@@ -41,7 +41,7 @@ namespace DAL
             else throw new ProviderException();
         }
 
-        public void SetData(List<Bill> data)
+        public void SetData(List<T> data)
         {
             if (DataProvider != null)
             {

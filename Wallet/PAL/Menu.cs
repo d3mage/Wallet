@@ -9,11 +9,15 @@ namespace PL
         IGetInputService inputService;
 
         IBillService billService;
+        ICategoryService categoryService;
+        IMoneyEventService moneyEventService; 
 
-        public Menu(IGetInputService input, IBillService bill)
+        public Menu(IGetInputService input, IBillService bill, ICategoryService category, IMoneyEventService money)
         {
             inputService = input; 
-            billService = bill; 
+            billService = bill;
+            categoryService = category;
+            moneyEventService = money;
         }
 
         public int Print()

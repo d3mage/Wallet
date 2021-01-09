@@ -11,7 +11,7 @@ namespace Wallet.Tests.BLL.Tests
         [Fact]
         public void ReadData_Success()
         {
-            var mock = new Mock<IBillContext>();
+            var mock = new Mock<IDataContext>();
             mock.Setup(x => x.GetData()).Returns(GetList());
             var readWriteService = new ReadWriteService(mock.Object);
 
@@ -32,7 +32,7 @@ namespace Wallet.Tests.BLL.Tests
         public void WriteData_Success()
         {
             List<Bill> data = GetList();
-            var mock = new Mock<IBillContext>();
+            var mock = new Mock<IDataContext>();
             mock.Setup(x => x.SetData(data)).Verifiable();
             var readWriteService = new ReadWriteService(mock.Object);
 

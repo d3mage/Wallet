@@ -3,26 +3,26 @@ using System.Collections.Generic;
 
 namespace BLL
 {
-    public class ReadWriteService : IReadWriteService
+    public class ReadWriteService<T> : IReadWriteService<T>
     {
-        private IBillContext _billContext;
-        public ReadWriteService(IBillContext context)
+        private  IDataContext<T> _dataContext;
+        public ReadWriteService(IDataContext<T> context)
         {
-            _billContext = context;
+            _dataContext = context;
         }
-        public List<Bill> ReadData()
+        public List<T> ReadData()
         {
-            List<Bill> data;
+            List<T> data;
             try
             {
-                data = _billContext.GetData();
+                data = _dataContext.GetData();
             }
             catch (EmptyListException e)
             {
-                data = new List<Bill>();
+                data = new List<T>();
             }
             return data;
         }
-        public void WriteData(List<Bill> data) => _billContext.SetData(data);
+        public void WriteData(List<T> data) => _dataContext.SetData(data);
     }
 }

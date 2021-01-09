@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace BLL
 {
-    public interface IReadWriteService
+    public interface IReadWriteService<T>
     {
-        public List<Bill> ReadData();
-        public void WriteData(List<Bill> data);
+        public List<T> ReadData();
+        public void WriteData(List<T> data);
     }
 }

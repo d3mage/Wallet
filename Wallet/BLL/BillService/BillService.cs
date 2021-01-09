@@ -6,9 +6,9 @@ namespace BLL
 {
     public class BillService : IBillService
     {
-        private IReadWriteService readWriteService;
+        private IReadWriteService<Bill> readWriteService;
 
-        public BillService(IReadWriteService readWrite)
+        public BillService(IReadWriteService<Bill> readWrite)
         {
             readWriteService = readWrite;
         }

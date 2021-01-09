@@ -12,19 +12,19 @@ namespace Wallet
             ReadUserInputService readUserInputService = new ReadUserInputService();
             GetInputService getInputService = new GetInputService(readUserInputService, verifyInputService);
 
-            XmlProvider<Bill> xmlProvider = new XmlProvider<Bill>();
-            BillContext billContext = new BillContext(xmlProvider, "data.txt");
-            ReadWriteService readWriteService = new ReadWriteService(billContext);
-            BillService billService = new BillService(readWriteService);
-            BillBusinessHandler billBusinessHandler = new BillBusinessHandler(getInputService, billService);
+            XmlProvider<Bill> billProvider = new XmlProvider<Bill>();
+            DataContext<Bill> billContext = new DataContext<Bill>(billProvider, "bills.xml");
+            ReadWriteService<Bill> billReadWrite = new ReadWriteService<Bill>(billContext);
+            BillService billService = new BillService(billReadWrite);
 
+            XmlProvider<string> stringProvider = new XmlProvider<string>();
+            DataContext<string> stringContext = new DataContext<string>(stringProvider, "categories.xml");
+            ReadWriteService<string> stringReadWrite = new ReadWriteService<string>(stringContext); 
             CategoryService categoryService = new CategoryService();
-            CategoryBusinessHandler categoryBusinessHandler = new CategoryBusinessHandler(getInputService, billService, categoryService);
 
             MoneyEventService moneyEventService = new MoneyEventService();
-            MoneyEventHandler moneyEventHandler = new MoneyEventHandler(getInputService, billService, categoryService, moneyEventService);
 
-            Menu menu = new Menu(getInputService, billService);
+            Menu menu = new Menu(getInputService, billService, categoryService, moneyEventService);
             menu.Print();
         }
     }

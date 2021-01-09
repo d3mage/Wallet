@@ -17,7 +17,7 @@ namespace Wallet.Tests.DAL.Tests
             var mock = new Mock<IProvider<Bill>>();
             mock.Setup(x => x.Read(conn)).Returns(GetList());
 
-            var context = new BillContext(mock.Object, conn);
+            var context = new DataContext<Bill>(mock.Object, conn);
 
             var expected = GetList();
             var actual = context.GetData();
@@ -37,7 +37,7 @@ namespace Wallet.Tests.DAL.Tests
         {
             IProvider<Bill> provider = null;
 
-            var context = new BillContext(provider, conn);
+            var context = new DataContext<Bill>(provider, conn);
 
             Assert.Throws<ProviderException>(() => context.GetData());
         }
@@ -48,7 +48,7 @@ namespace Wallet.Tests.DAL.Tests
             var mock = new Mock<IProvider<Bill>>();
             mock.Setup(x => x.Read(conn)).Throws<Exception>();
 
-            var context = new BillContext(mock.Object, conn);
+            var context = new DataContext<Bill>(mock.Object, conn);
 
             Assert.Throws<EmptyListException>(() => context.GetData());
         }
@@ -57,7 +57,7 @@ namespace Wallet.Tests.DAL.Tests
         public void SetData_AddSuccessfully()
         {
             IProvider<Bill> provider = new XmlProvider<Bill>();
-            BillContext context = new BillContext(provider, conn);
+            DataContext<Bill> context = new DataContext<Bill>(provider, conn);
 
             var expected = GetList();
             context.SetData(GetList());
@@ -78,7 +78,7 @@ namespace Wallet.Tests.DAL.Tests
         {
             IProvider<Bill> provider = null;
 
-            var context = new BillContext(provider, conn);
+            var context = new DataContext<Bill>(provider, conn);
 
             Assert.Throws<ProviderException>(() => context.SetData(GetList()));
         }
