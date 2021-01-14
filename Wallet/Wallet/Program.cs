@@ -20,7 +20,7 @@ namespace Wallet
             XmlProvider<string> stringProvider = new XmlProvider<string>();
             DataContext<string> stringContext = new DataContext<string>(stringProvider, "categories.xml");
             ReadWriteService<string> stringReadWrite = new ReadWriteService<string>(stringContext); 
-            CategoryService categoryService = new CategoryService();
+            CategoryService categoryService = new CategoryService(stringReadWrite);
 
             MoneyEventService moneyEventService = new MoneyEventService();
 

@@ -88,11 +88,9 @@ namespace PL
             }
             else if(func.Equals("profit"))
             {
-                moneyHandler.AddNewEvent(false);
             }
             else if (func.Equals("expense"))
             {
-                moneyHandler.AddNewEvent(true);
             }
             else if(func.Equals(""))
             {
@@ -130,11 +128,9 @@ namespace PL
             }
             else if(func.Equals("category"))
             {
-                categoryHandler.DeleteCategory();
             }
             else if (func.Equals("event"))
             {
-                moneyHandler.DeleteEvent();
             }
             else if (func.Equals(""))
             {
@@ -175,7 +171,6 @@ namespace PL
             }
             else if (func.Equals("category"))
             {
-                categoryHandler.ChangeCategory();
             }
             else if (func.Equals("event"))
             {
@@ -200,15 +195,12 @@ namespace PL
             }
             if (func.Equals("range"))
             {
-                businessHandler.RangedSearch();
             }
             else if (func.Equals("day"))
             {
-                businessHandler.SearchByDate();
             }
             else if (func.Equals("category"))
             {
-                businessHandler.SearchByCategory();
             }
             else if (func.Equals(""))
             {

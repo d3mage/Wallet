@@ -6,65 +6,73 @@ namespace BLL
 {
     public class CategoryService : ICategoryService
     {
-        public bool isCategoryNameAvailable(Bill bill, string name)
+        private IReadWriteService<string> readWriteService;
+
+        public CategoryService(IReadWriteService<string> readWrite)
         {
-            if (bill.categories == null) return true;
-            foreach (var c in bill.categories)
-            {
-                if (c.Name.Equals(name)) return false;
-            }
-            return true;
+            readWriteService = readWrite; 
         }
 
-        public Category GetCategoryByName(Bill bill, string name)
+        public void AddCategory(string name)
         {
-            foreach (var b in bill.categories)
+            bool isAvailable = isCategoryNameAvailable(name);
+            if (isAvailable == true)
             {
-                if (b.Name.Equals(name)) return b;
+                List<string> data = readWriteService.ReadData();
+                data.Add(name);
+                readWriteService.WriteData(data);
             }
-            throw new CategoryNameInvalidException();
+            else throw new CategoryNameInvalidException();
         }
 
-        public Category CreateNewCategory(string name)
+        public void DeleteCategory(string name)
         {
-            return new Category(name);
+            bool isAvailable = isCategoryNameAvailable(name);
+            if (isAvailable != true)
+            {
+                List<string> data = readWriteService.ReadData();
+                data.Remove(name);
+                readWriteService.WriteData(data);
+            }
+            else throw new CategoryNameInvalidException();
         }
 
-
-        public void AddCategory(Bill bill, Category category)
+        public void ChangeCategory(string name, string newName)
         {
-            if (bill.categories == null)
+            bool isAvailable = isCategoryNameAvailable(name);
+            if (isAvailable == true)
             {
-                bill.categories = new List<Category>();
+                List<string> data = readWriteService.ReadData();
+                data.Insert(data.IndexOf(name), newName);
+                readWriteService.WriteData(data);
+                //Change category in money events
             }
-            bill.categories.Add(category);
+            else throw new CategoryNameInvalidException();
         }
 
-        public void DeleteCategory(Bill bill, Category category)
+        public bool isCategoryNameAvailable(string name)
         {
-            if(bill.categories != null)
+            string toCheck = GetCategoryByName(name);
+            if (toCheck == null)
             {
-                bill.categories.Remove(category);
+                return true;
             }
+            return false;
         }
 
-        public void ChangeCategory(Bill bill, string oldName, string newName)
+        public string GetCategoryByName(string name)
         {
-            foreach (var b in bill.categories)
+            List<string> data = readWriteService.ReadData();
+            if (data.Contains(name))
             {
-                if (b.Name.Equals(oldName))
-                {
-                    b.Name = newName;
-                }
+                return name;
             }
+            return null;
         }
 
-        public void ShowCategories(Bill bill)
+        public List<string> GetCategories()
         {
-            foreach (Category c in bill.categories)
-            {
-                Console.WriteLine(c.Name);
-            }
+            return readWriteService.ReadData(); 
         }
     }
 }
