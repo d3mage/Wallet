@@ -88,9 +88,43 @@ namespace PL
             }
             else if(func.Equals("profit"))
             {
+                Printer.Print(billService.GetBillsNames());
+
+                Console.WriteLine("Enter name of bill: ");
+                string billName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+                Console.WriteLine("Enter name of profit: ");
+                string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+                Console.WriteLine("Enter category of profit: ");
+                string category = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+                Console.WriteLine("Enter ammount of money: ");
+                double money = Convert.ToDouble(inputService.GetVerifiedInput(@"^([1-9]{1}[0-9]{0,2}(\,[0-9]{3})*(\.[0-9]{0,2})?
+                   |[1-9]{1}[0-9]{0,}(\.[0-9]{0,2})?
+                   |0(\.[0-9]{0,2})?|(\.[0-9]{1,2})?)"));
+
+                moneyEventService.AddMoneyEvent(billService, billName, false, name, category, money);
             }
             else if (func.Equals("expense"))
             {
+                Printer.Print(billService.GetBillsNames());
+
+                Console.WriteLine("Enter name of bill: ");
+                string billName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+                Console.WriteLine("Enter name of profit: ");
+                string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+                Console.WriteLine("Enter category of profit: ");
+                string category = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+                Console.WriteLine("Enter ammount of money: ");
+                double money = Convert.ToDouble(inputService.GetVerifiedInput(@"^([1-9]{1}[0-9]{0,2}(\,[0-9]{3})*(\.[0-9]{0,2})?
+                   |[1-9]{1}[0-9]{0,}(\.[0-9]{0,2})?
+                   |0(\.[0-9]{0,2})?|(\.[0-9]{1,2})?)"));
+
+                moneyEventService.AddMoneyEvent(billService, billName, true, name, category, money);
             }
             else if(func.Equals(""))
             {

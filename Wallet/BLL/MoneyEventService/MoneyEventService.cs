@@ -5,7 +5,7 @@ namespace BLL
 {
     public class MoneyEventService : IMoneyEventService
     {
-        public void AddMoneyEvent(IBillService billService, string billName, MoneyEvent moneyEvent)
+        public void AddMoneyEvent(IBillService billService, string billName, bool expense, string name, string category, double money)
         {
             Bill bill = billService.GetBillByName(billName);
             if (bill == null)
@@ -16,6 +16,7 @@ namespace BLL
             {
                 bill.moneyEvents = new List<MoneyEvent>();
             }
+            MoneyEvent moneyEvent = CreateNewMoneyEvent(expense, name, category, money);
             bill.moneyEvents.Add(moneyEvent);
         }
         public void DeleteMoneyEvent(IBillService billService, string billName, string moneyEventName)
@@ -34,7 +35,7 @@ namespace BLL
             }
         }
 
-        public MoneyEvent CreateNewMoneyExpense(bool expense, string name, string category, double money)
+        public MoneyEvent CreateNewMoneyEvent(bool expense, string name, string category, double money)
         {
             return new MoneyEvent(expense, name, category, money);
         }

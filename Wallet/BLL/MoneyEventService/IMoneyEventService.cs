@@ -1,12 +1,14 @@
 ﻿using DAL;
+using System.Collections.Generic;
 
 namespace BLL
 {
     public interface IMoneyEventService
     {
-        public void AddMoneyEvent(Category category, MoneyEvent moneyEvent);
-        public MoneyEvent CreateNewMoneyExpense(bool expense, string name, double money);
-        public MoneyEvent GetEventByName(Category category, string name);
-        public void DeleteMoneyEvent(Category category, MoneyEvent moneyEvent);
+        public void AddMoneyEvent(IBillService billService, string billName, bool expense, string name, string category, double money);
+        public void DeleteMoneyEvent(IBillService billService, string billName, string moneyEventName);
+
+        public MoneyEvent CreateNewMoneyEvent(bool expense, string name, string category, double money);
+        public List<MoneyEvent> GetEventsByName(IBillService billService, string billName, string moneyEventName);
     }
 }
