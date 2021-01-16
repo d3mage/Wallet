@@ -65,7 +65,7 @@ namespace BLL
             return false; 
         }
 
-        private Bill GetBillByName(string name)
+        public Bill GetBillByName(string name)
         {
             List<Bill> data = readWriteService.ReadData();
             foreach (var d in data)

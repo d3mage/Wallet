@@ -11,6 +11,7 @@ namespace BLL
         public void ChangeBillName(string name, string newName);
         public void ChangeBillInList(Bill bill);
 
+        public Bill GetBillByName(string name);
         public List<Bill> GetBills();
         public List<string> GetBillsNames();
 

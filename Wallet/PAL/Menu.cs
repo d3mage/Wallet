@@ -80,8 +80,8 @@ namespace PL
 
                     billService.AddBill(name);
                 }
-                catch (Exception e) when (/*e is EmptyListException ||*/
-                 e is TooManyFalseAttemptsException || e is BillNameInvalidException)
+                catch (Exception e) when (e is TooManyFalseAttemptsException
+                || e is BillNameInvalidException)
                 {
                     Console.WriteLine(e.Message);
                 }
@@ -120,8 +120,8 @@ namespace PL
 
                     billService.DeleteBill(name);
                 }
-                catch (Exception e) when (/*e is EmptyListException ||*/
-                 e is TooManyFalseAttemptsException || e is BillNameInvalidException)
+                catch (Exception e) when (e is TooManyFalseAttemptsException 
+                || e is BillNameInvalidException)
                 {
                     Console.WriteLine(e.Message);
                 }
@@ -163,8 +163,8 @@ namespace PL
 
                     billService.ChangeBillName(oldName, newName);
                 }
-                catch (Exception e) when (/*e is EmptyListException ||*/
-                 e is TooManyFalseAttemptsException || e is BillNameInvalidException)
+                catch (Exception e) when (e is TooManyFalseAttemptsException
+                || e is BillNameInvalidException)
                 {
                     Console.WriteLine(e.Message);
                 }
@@ -212,7 +212,7 @@ namespace PL
             try
             {
                 List<string> currentBills = billService.GetBillsNames();
-                Printer.Print(currentBills); 
+                Printer.Print(currentBills);
 
                 Console.WriteLine("Enter name of bill you want to transfer money from: ");
                 string firstBillName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
@@ -223,10 +223,10 @@ namespace PL
                 Console.WriteLine("Enter ammount of money you want to transfer: ");
                 double ammount = Convert.ToDouble(inputService.GetVerifiedInput(@"[0-9]+"));
 
-                billService.TransferMoney(firstBillName, secondBillName, ammount); 
+                billService.TransferMoney(firstBillName, secondBillName, ammount);
             }
-            catch (Exception e) when (/*e is EmptyListException ||*/
-            e is TooManyFalseAttemptsException || e is BillNameInvalidException)
+            catch (Exception e) when (e is TooManyFalseAttemptsException
+            || e is BillNameInvalidException || e is InsufficientFundsException)
             {
                 Console.WriteLine(e.Message);
             }

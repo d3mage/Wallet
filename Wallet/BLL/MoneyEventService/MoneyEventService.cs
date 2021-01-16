@@ -5,32 +5,58 @@ namespace BLL
 {
     public class MoneyEventService : IMoneyEventService
     {
-        public void AddMoneyEvent(Category category, MoneyEvent moneyEvent)
+        public void AddMoneyEvent(IBillService billService, string billName, MoneyEvent moneyEvent)
         {
-            if (category.moneyEvents == null)
+            Bill bill = billService.GetBillByName(billName);
+            if (bill == null)
             {
-                category.moneyEvents = new List<MoneyEvent>();
+                throw new BillNameInvalidException();
             }
-            category.moneyEvents.Add(moneyEvent);
+            if (bill.moneyEvents == null)
+            {
+                bill.moneyEvents = new List<MoneyEvent>();
+            }
+            bill.moneyEvents.Add(moneyEvent);
+        }
+        public void DeleteMoneyEvent(IBillService billService, string billName, string moneyEventName)
+        {
+            Bill bill = billService.GetBillByName(billName);
+            if (bill == null)
+            {
+                throw new BillNameInvalidException();
+            }
+            foreach (var c in bill.moneyEvents)
+            {
+                if (c.Description.Equals(moneyEventName))
+                {
+                    bill.moneyEvents.Remove(c);
+                }
+            }
         }
 
-        public MoneyEvent GetNewMoneyExpense(bool expense, string name, double money)
+        public MoneyEvent CreateNewMoneyExpense(bool expense, string name, string category, double money)
         {
-            return new MoneyEvent(expense, name, money);
+            return new MoneyEvent(expense, name, category, money);
         }
 
-        public MoneyEvent GetEventByName(Category category, string name)
+        public List<MoneyEvent> GetEventsByName(IBillService billService, string billName, string moneyEventName)
         {
-            foreach (var c in category.moneyEvents)
+            Bill bill = billService.GetBillByName(billName);
+            if (bill == null)
             {
-                if (c.Description.Equals(name)) return c;
+                throw new BillNameInvalidException();
             }
-            throw new MoneyEventNameInvalidException();
+            List<MoneyEvent> moneyEvents = new List<MoneyEvent>(); 
+            foreach (var c in bill.moneyEvents)
+            {
+                if (c.Description.Equals(moneyEventName))
+                {
+                    moneyEvents.Add(c);
+                }
+            }
+            return moneyEvents; 
         }
-        public void DeleteMoneyEvent(Category category, MoneyEvent moneyEvent)
-        {
-            category.moneyEvents.Remove(moneyEvent);
-        }
+        
 
     }
 }
