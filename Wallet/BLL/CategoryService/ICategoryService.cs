@@ -7,7 +7,7 @@ namespace BLL
     {
         public void AddCategory(string name);
         public void DeleteCategory(string name);
-        public void ChangeCategory(string name, string newName);
+        public void ChangeCategory(IBillService billService, string name, string newName);
 
         public bool isCategoryNameAvailable(string name);
         public string GetCategoryByName(string name);

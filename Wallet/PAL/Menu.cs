@@ -26,7 +26,7 @@ namespace PL
 
             while (!func.Equals("exit"))
             {
-                Console.WriteLine(_menuEntry);
+                Console.WriteLine(menuEntry);
                 try
                 {
                     func = inputService.GetVerifiedInput(@"[A-Za-z]{3,10}");
@@ -96,7 +96,7 @@ namespace PL
                 Console.WriteLine("Enter name of profit: ");
                 string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
 
-                Console.WriteLine("Enter category of profit: ");
+                Console.WriteLine("Enter category: ");
                 string category = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
 
                 Console.WriteLine("Enter ammount of money: ");
@@ -113,10 +113,10 @@ namespace PL
                 Console.WriteLine("Enter name of bill: ");
                 string billName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
 
-                Console.WriteLine("Enter name of profit: ");
+                Console.WriteLine("Enter name of expense: ");
                 string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
 
-                Console.WriteLine("Enter category of profit: ");
+                Console.WriteLine("Enter category: ");
                 string category = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
 
                 Console.WriteLine("Enter ammount of money: ");
@@ -162,9 +162,24 @@ namespace PL
             }
             else if(func.Equals("category"))
             {
+                Printer.Print(categoryService.GetCategories());
+
+                Console.WriteLine("Enter name of category: ");
+                string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+                categoryService.DeleteCategory(name);
             }
             else if (func.Equals("event"))
             {
+                Printer.Print(billService.GetBillsNames());
+
+                Console.WriteLine("Enter name of bill: ");
+                string billName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+                Console.WriteLine("Enter name of event: ");
+                string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+                moneyEventService.DeleteMoneyEvent(billService, billName, name);
             }
             else if (func.Equals(""))
             {
@@ -205,6 +220,15 @@ namespace PL
             }
             else if (func.Equals("category"))
             {
+                Printer.Print(billService.GetBillsNames());
+
+                Console.WriteLine("Enter name of category you want to change: : ");
+                string oldName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+                Console.WriteLine("Enter new name: ");
+                string newName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+                categoryService.ChangeCategory(billService, oldName, newName);
             }
             else if (func.Equals("event"))
             {
@@ -266,7 +290,7 @@ namespace PL
             }
         }
 
-        private string _menuEntry = "What do you want to do?\n\"Add\"\n\"Delete\"\n\"Change\" info\nGenerate data \"stats\"\nTransfer money between bills";
+        private string menuEntry = "What do you want to do?\n\"Add\"\n\"Delete\"\n\"Change\" info\nGenerate data \"stats\"\n\"Transfer\" money between bills";
         private string addMenu = "What do you want to add?\nBill\nCategory\nProfit\nExpense";
         private string deleteMenu = "What do you want to delete?\nBill\nCategory\nProfit\nExpense";
         private string changeMenu = "What do you want to change?\nBill\nCategory\nProfit\nExpense";

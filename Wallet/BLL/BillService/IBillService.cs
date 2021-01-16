@@ -15,10 +15,11 @@ namespace BLL
         public List<Bill> GetBills();
         public List<string> GetBillsNames();
 
+        public void ChangeBillMoney(Bill bill, MoneyEvent moneyEvent)
         public void TransferMoney(string fBill, string sBill, double ammount);
 
         public void GetMoneyInRange(Bill bill, DateTime startDate, DateTime endDate, out double profits, out double expenses);
         public void GetMoneyByDate(Bill bill, DateTime date, out double profits, out double expenses);
-        public void GetMoneyByCategory(Bill bill, string name, out double profits, out double expenses);
+        //public void GetMoneyByCategory(Bill bill, string name, out double profits, out double expenses);
     }
 }

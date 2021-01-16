@@ -18,6 +18,7 @@ namespace BLL
             }
             MoneyEvent moneyEvent = CreateNewMoneyEvent(expense, name, category, money);
             bill.moneyEvents.Add(moneyEvent);
+            billService.ChangeBillMoney(bill, moneyEvent);
         }
         public void DeleteMoneyEvent(IBillService billService, string billName, string moneyEventName)
         {
@@ -34,6 +35,8 @@ namespace BLL
                 }
             }
         }
+
+        public void ChangeMoneyEvent();
 
         public MoneyEvent CreateNewMoneyEvent(bool expense, string name, string category, double money)
         {

@@ -37,15 +37,26 @@ namespace BLL
             else throw new CategoryNameInvalidException();
         }
 
-        public void ChangeCategory(string name, string newName)
+        public void ChangeCategory(IBillService billService, string name, string newName)
         {
             bool isAvailable = isCategoryNameAvailable(name);
             if (isAvailable == true)
             {
                 List<string> data = readWriteService.ReadData();
-                data.Insert(data.IndexOf(name), newName);
+                data[data.IndexOf(name)] = newName; 
                 readWriteService.WriteData(data);
-                //Change category in money events
+                List<Bill> bills = billService.GetBills();
+                foreach(var bill in bills)
+                {
+                    List<MoneyEvent> moneyEvents = bill.moneyEvents;
+                    foreach(var moneyEvent in moneyEvents)
+                    {
+                        if(moneyEvent.category.Equals(name))
+                        {
+                            moneyEvent.category = newName;
+                        }
+                    }
+                }
             }
             else throw new CategoryNameInvalidException();
         }

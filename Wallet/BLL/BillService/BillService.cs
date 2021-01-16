@@ -127,8 +127,12 @@ namespace BLL
             ChangeBillMoney(sBill, profitEvent); 
         }
 
-        private void ChangeBillMoney(Bill bill, MoneyEvent moneyEvent)
+        public void ChangeBillMoney(Bill bill, MoneyEvent moneyEvent)
         {
+            if(bill == null)
+            {
+                throw new BillNameInvalidException();
+            }
             if (moneyEvent.isExpense != true)
             {
                 double tempMoney = bill.Money;
@@ -196,30 +200,30 @@ namespace BLL
             expenses = tempExpenses; 
         }
 
-        public void GetMoneyByCategory(Bill bill, string name,  out double profits, out double expenses)
-        {
-            double tempProfits = 0, tempExpenses = 0;
+        //public void GetMoneyByCategory(Bill bill, string name,  out double profits, out double expenses)
+        //{
+        //    double tempProfits = 0, tempExpenses = 0;
 
-            foreach (var c in bill.categories)
-            {
-                if(c.Name.Equals(name))
-                {
-                    foreach(var m in c.moneyEvents)
-                    {
-                        if (m.isExpense == false)
-                        {
-                            tempProfits += m.Value;
-                        }
-                        else
-                        {
-                            tempExpenses -= m.Value;
-                        }
-                    }
-                }    
-            }
+        //    foreach (var c in bill.categories)
+        //    {
+        //        if(c.Name.Equals(name))
+        //        {
+        //            foreach(var m in c.moneyEvents)
+        //            {
+        //                if (m.isExpense == false)
+        //                {
+        //                    tempProfits += m.Value;
+        //                }
+        //                else
+        //                {
+        //                    tempExpenses -= m.Value;
+        //                }
+        //            }
+        //        }    
+        //    }
 
-            profits = tempProfits;
-            expenses = tempExpenses; 
-        }
+        //    profits = tempProfits;
+        //    expenses = tempExpenses; 
+        //}
     }
 }
