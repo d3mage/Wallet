@@ -8,10 +8,12 @@ namespace PL
     {
         public static void Print(List<string> list)
         {
+            Console.WriteLine("\n#########\n");
             foreach(var l in list)
             {
                 Console.WriteLine(l);
             }
+            Console.WriteLine("\n#########\n");
         }
     }
 }

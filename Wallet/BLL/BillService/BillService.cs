@@ -15,7 +15,7 @@ namespace BLL
 
         public void AddBill(string name)
         {
-            bool isAvailable = isBillNameAvailable(name);
+            bool isAvailable = IsBillNameAvailable(name);
             if (isAvailable == true)
             {
                 Bill bill = CreateNewBill(name);
@@ -27,7 +27,7 @@ namespace BLL
         }
         public void DeleteBill(string name)
         {
-            bool isAvailable = isBillNameAvailable(name);
+            bool isAvailable = IsBillNameAvailable(name);
             if (isAvailable != true)
             {
                 List<Bill> data = readWriteService.ReadData();
@@ -39,7 +39,7 @@ namespace BLL
         }
         public void ChangeBillName(string name, string newName)
         {
-            bool isAvailable = isBillNameAvailable(name);
+            bool isAvailable = IsBillNameAvailable(name);
             if (isAvailable != true)
             {
                 List<Bill> data = readWriteService.ReadData();
@@ -55,7 +55,7 @@ namespace BLL
             else throw new BillNameInvalidException();
         }
  
-        private bool isBillNameAvailable(string name)
+        private bool IsBillNameAvailable(string name)
         {
             Bill billToCheck = GetBillByName(name);
             if(billToCheck == null)
@@ -81,7 +81,7 @@ namespace BLL
         }
 
        
-        public void ChangeBillInList(Bill bill)
+        public void UpdateBillInLIst(Bill bill)
         {
             List<Bill> data = readWriteService.ReadData();
             foreach (var d in data)
@@ -110,7 +110,7 @@ namespace BLL
             List<string> toReturn = new List<string>(); 
             foreach (var d in data)
             {
-                toReturn.Add(d.Name); 
+                toReturn.Add(d.Name + " " + d.Money); 
             }
             return toReturn; 
         }
@@ -124,7 +124,10 @@ namespace BLL
             Bill sBill = GetBillByName(sName);
 
             ChangeBillMoney(fBill, expenseEvent);
-            ChangeBillMoney(sBill, profitEvent); 
+            ChangeBillMoney(sBill, profitEvent);
+
+            UpdateBillInLIst(fBill);
+            UpdateBillInLIst(sBill);
         }
 
         public void ChangeBillMoney(Bill bill, MoneyEvent moneyEvent)
@@ -136,20 +139,28 @@ namespace BLL
             if (moneyEvent.isExpense != true)
             {
                 double tempMoney = bill.Money;
-                tempMoney += moneyEvent.Value;
+                tempMoney += moneyEvent.value;
                 bill.Money = tempMoney;
             }
             else
             {
-                if (bill.Money < moneyEvent.Value)
+                if (bill.Money < moneyEvent.value)
                     throw new InsufficientFundsException();
                 else
                 {
                     double tempMoney = bill.Money;
-                    tempMoney -= moneyEvent.Value;
+                    tempMoney -= moneyEvent.value;
                     bill.Money = tempMoney;
                 }
             }
+            UpdateBillInLIst(bill);
+        }
+
+        public void ChangeCategories(string name, List<MoneyEvent> moneyEvents)
+        {
+            Bill bill = GetBillByName(name);
+            bill.moneyEvents = moneyEvents;
+            UpdateBillInLIst(bill);
         }
 
         public void GetMoneyInRange(Bill bill, DateTime startDate, DateTime endDate, out double profits, out double expenses)
@@ -162,11 +173,11 @@ namespace BLL
                 {
                     if (m.isExpense == false)
                     {
-                        tempProfits += m.Value;
+                        tempProfits += m.value;
                     }
                     else
                     {
-                        tempExpenses -= m.Value;
+                        tempExpenses -= m.value;
                     }
                     Console.WriteLine(m.ToString());
                 }
@@ -175,7 +186,6 @@ namespace BLL
             profits = tempProfits;
             expenses = tempExpenses; 
         }
-        
         public void GetMoneyByDate(Bill bill, DateTime date, out double profits, out double expenses)
         {
             double tempProfits = 0, tempExpenses = 0;
@@ -186,11 +196,11 @@ namespace BLL
                 {
                     if (m.isExpense == false)
                     {
-                        tempProfits += m.Value;
+                        tempProfits += m.value;
                     }
                     else
                     {
-                        tempExpenses -= m.Value;
+                        tempExpenses -= m.value;
                     }
                     Console.WriteLine(m.ToString());
                 }

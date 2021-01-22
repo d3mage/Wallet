@@ -9,14 +9,16 @@ namespace BLL
         public void AddBill(string name);
         public void DeleteBill(string name);
         public void ChangeBillName(string name, string newName);
-        public void ChangeBillInList(Bill bill);
+        public void UpdateBillInLIst(Bill bill);
 
         public Bill GetBillByName(string name);
         public List<Bill> GetBills();
         public List<string> GetBillsNames();
 
-        public void ChangeBillMoney(Bill bill, MoneyEvent moneyEvent)
+        public void ChangeBillMoney(Bill bill, MoneyEvent moneyEvent);
         public void TransferMoney(string fBill, string sBill, double ammount);
+
+        public void ChangeCategories(string name, List<MoneyEvent> moneyEvents); 
 
         public void GetMoneyInRange(Bill bill, DateTime startDate, DateTime endDate, out double profits, out double expenses);
         public void GetMoneyByDate(Bill bill, DateTime date, out double profits, out double expenses);

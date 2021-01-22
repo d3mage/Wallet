@@ -166,7 +166,7 @@ namespace Wallet.Tests.BLL.Tests
             Bill changeBill = new Bill("test bill", 300);
             BillService service = new BillService(mock.Object);
 
-            service.ChangeBillInList(changeBill);
+            service.UpdateBillInLIst(changeBill);
 
             Assert.Equal(changeBill.Name, data[0].Name);
             Assert.Equal(changeBill.Money, data[0].Money);

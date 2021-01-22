@@ -22,7 +22,7 @@ namespace Wallet
             ReadWriteService<string> stringReadWrite = new ReadWriteService<string>(stringContext); 
             CategoryService categoryService = new CategoryService(stringReadWrite);
 
-            MoneyEventService moneyEventService = new MoneyEventService();
+            MoneyEventService moneyEventService = new MoneyEventService(billService);
 
             Menu menu = new Menu(getInputService, billService, categoryService, moneyEventService);
             menu.Print();

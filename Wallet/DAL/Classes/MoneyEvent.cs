@@ -2,11 +2,12 @@
 
 namespace DAL
 {
+    [Serializable]
     public class MoneyEvent
     {
         public bool isExpense { get; set; }
-        public string Description { get; set; }
-        public double Value { get; set; }
+        public string name { get; set; }
+        public double value { get; set; }
         public string category { get; set; }
         public DateTime Date { get; set; }
 
@@ -14,14 +15,15 @@ namespace DAL
         public MoneyEvent(bool expense, string description, string category, double value)
         {
             isExpense = expense;
-            Description = description;
-            Value = value;
+            name = description;
+            this.value = value;
+            this.category = category;
             Date = DateTime.Today;
         }
 
         public override string ToString()
         {
-            return $"Date: {Date}\nEvent: {Description}\nValue: {Value}";
+            return $"Date: {Date}\nEvent: {name}\nValue: {value}\nCategory: {category}";
         }
     }
 

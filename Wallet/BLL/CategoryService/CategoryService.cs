@@ -6,7 +6,7 @@ namespace BLL
 {
     public class CategoryService : ICategoryService
     {
-        private IReadWriteService<string> readWriteService;
+        private readonly IReadWriteService<string> readWriteService;
 
         public CategoryService(IReadWriteService<string> readWrite)
         {

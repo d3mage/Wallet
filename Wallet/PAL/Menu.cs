@@ -6,11 +6,10 @@ namespace PL
 {
     public class Menu
     {
-        IGetInputService inputService;
-
-        IBillService billService;
-        ICategoryService categoryService;
-        IMoneyEventService moneyEventService; 
+        readonly IGetInputService inputService;
+        readonly IBillService billService;
+        readonly ICategoryService categoryService;
+        readonly IMoneyEventService moneyEventService; 
 
         public Menu(IGetInputService input, IBillService bill, ICategoryService category, IMoneyEventService money)
         {
@@ -88,49 +87,39 @@ namespace PL
             }
             else if(func.Equals("profit"))
             {
-                Printer.Print(billService.GetBillsNames());
-
-                Console.WriteLine("Enter name of bill: ");
-                string billName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
-
-                Console.WriteLine("Enter name of profit: ");
-                string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
-
-                Console.WriteLine("Enter category: ");
-                string category = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
-
-                Console.WriteLine("Enter ammount of money: ");
-                double money = Convert.ToDouble(inputService.GetVerifiedInput(@"^([1-9]{1}[0-9]{0,2}(\,[0-9]{3})*(\.[0-9]{0,2})?
-                   |[1-9]{1}[0-9]{0,}(\.[0-9]{0,2})?
-                   |0(\.[0-9]{0,2})?|(\.[0-9]{1,2})?)"));
-
-                moneyEventService.AddMoneyEvent(billService, billName, false, name, category, money);
+               AddMoneyEvent("profit", false);
             }
             else if (func.Equals("expense"))
             {
-                Printer.Print(billService.GetBillsNames());
-
-                Console.WriteLine("Enter name of bill: ");
-                string billName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
-
-                Console.WriteLine("Enter name of expense: ");
-                string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
-
-                Console.WriteLine("Enter category: ");
-                string category = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
-
-                Console.WriteLine("Enter ammount of money: ");
-                double money = Convert.ToDouble(inputService.GetVerifiedInput(@"^([1-9]{1}[0-9]{0,2}(\,[0-9]{3})*(\.[0-9]{0,2})?
-                   |[1-9]{1}[0-9]{0,}(\.[0-9]{0,2})?
-                   |0(\.[0-9]{0,2})?|(\.[0-9]{1,2})?)"));
-
-                moneyEventService.AddMoneyEvent(billService, billName, true, name, category, money);
+                AddMoneyEvent("expense", true); 
             }
             else if(func.Equals(""))
             {
                 return; 
             }
         }
+        private void AddMoneyEvent(string eventName, bool isExpense)
+        {
+            Printer.Print(billService.GetBillsNames());
+
+            Console.WriteLine("Enter name of bill: ");
+            string billName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+            Console.WriteLine("Enter name of {0}: ", eventName);
+            string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+            Console.WriteLine("Enter category: ");
+            string category = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+            Console.WriteLine("Enter ammount of money: ");
+            double money = Convert.ToDouble(inputService.GetVerifiedInput(@"^([1-9]{1}[0-9]{0,2}(\,[0-9]{3})*(\.[0-9]{0,2})?
+                   |[1-9]{1}[0-9]{0,}(\.[0-9]{0,2})?
+                   |0(\.[0-9]{0,2})?|(\.[0-9]{1,2})?)"));
+
+            moneyEventService.AddMoneyEvent(categoryService, billName, isExpense, name, category, money);
+
+        }
+
         private void DeleteMenu()
         {
             string func = "";
@@ -176,10 +165,11 @@ namespace PL
                 Console.WriteLine("Enter name of bill: ");
                 string billName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
 
+                Printer.Print(moneyEventService.GetEventNames(billName));
                 Console.WriteLine("Enter name of event: ");
                 string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
 
-                moneyEventService.DeleteMoneyEvent(billService, billName, name);
+                moneyEventService.DeleteMoneyEvent(billName, name);
             }
             else if (func.Equals(""))
             {
@@ -220,7 +210,7 @@ namespace PL
             }
             else if (func.Equals("category"))
             {
-                Printer.Print(billService.GetBillsNames());
+                Printer.Print(categoryService.GetCategories());
 
                 Console.WriteLine("Enter name of category you want to change: : ");
                 string oldName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
@@ -230,10 +220,15 @@ namespace PL
 
                 categoryService.ChangeCategory(billService, oldName, newName);
             }
-            else if (func.Equals("event"))
-            {
-               
-            }
+            //else if (func.Equals("event"))
+            //{
+            //    Printer.Print(billService.GetBillsNames());
+
+            //    Console.WriteLine("Enter name of bill: ");
+            //    string billName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+            //    Printer.Print(moneyEventService.GetEventNames(billName));
+            //}
             else if (func.Equals(""))
             {
                 return;
@@ -290,10 +285,10 @@ namespace PL
             }
         }
 
-        private string menuEntry = "What do you want to do?\n\"Add\"\n\"Delete\"\n\"Change\" info\nGenerate data \"stats\"\n\"Transfer\" money between bills";
-        private string addMenu = "What do you want to add?\nBill\nCategory\nProfit\nExpense";
-        private string deleteMenu = "What do you want to delete?\nBill\nCategory\nProfit\nExpense";
-        private string changeMenu = "What do you want to change?\nBill\nCategory\nProfit\nExpense";
-        private string statsMenu = "What stats do you want to get?\nStats by date \"range\"\nStats by \"day\"\nStats by \"category\"";
+        private string menuEntry = "\nWhat do you want to do?\n\"Add\"\n\"Delete\"\n\"Change\" info\nGenerate data \"stats\"\n\"Transfer\" money between bills\n";
+        private string addMenu = "\nWhat do you want to add?\nBill\nProfit\nExpense\n";
+        private string deleteMenu = "\nWhat do you want to delete?\nBill\nCategory\nEvent\n";
+        private string changeMenu = "\nWhat do you want to change?\nBill\nCategory\nProfit\nExpense\n";
+        private string statsMenu = "\nWhat stats do you want to get?\nStats by date \"range\"\nStats by \"day\"\nStats by \"category\"\n";
     }
 }
