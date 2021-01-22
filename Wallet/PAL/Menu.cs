@@ -100,24 +100,31 @@ namespace PL
         }
         private void AddMoneyEvent(string eventName, bool isExpense)
         {
-            Printer.Print(billService.GetBillsNames());
+            try
+            {
+                Printer.Print(billService.GetBillsNames());
 
-            Console.WriteLine("Enter name of bill: ");
-            string billName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+                Console.WriteLine("Enter name of bill: ");
+                string billName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
 
-            Console.WriteLine("Enter name of {0}: ", eventName);
-            string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+                Console.WriteLine("Enter name of {0}: ", eventName);
+                string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
 
-            Console.WriteLine("Enter category: ");
-            string category = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+                Console.WriteLine("Enter category: ");
+                string category = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
 
-            Console.WriteLine("Enter ammount of money: ");
-            double money = Convert.ToDouble(inputService.GetVerifiedInput(@"^([1-9]{1}[0-9]{0,2}(\,[0-9]{3})*(\.[0-9]{0,2})?
+                Console.WriteLine("Enter ammount of money: ");
+                double money = Convert.ToDouble(inputService.GetVerifiedInput(@"^([1-9]{1}[0-9]{0,2}(\,[0-9]{3})*(\.[0-9]{0,2})?
                    |[1-9]{1}[0-9]{0,}(\.[0-9]{0,2})?
                    |0(\.[0-9]{0,2})?|(\.[0-9]{1,2})?)"));
 
-            moneyEventService.AddMoneyEvent(categoryService, billName, isExpense, name, category, money);
-
+                moneyEventService.AddMoneyEvent(categoryService, billName, isExpense, name, category, money);
+            }
+            catch (Exception e) when (e is TooManyFalseAttemptsException
+                || e is BillNameInvalidException || e is InsufficientFundsException)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         private void DeleteMenu()
@@ -151,25 +158,42 @@ namespace PL
             }
             else if(func.Equals("category"))
             {
-                Printer.Print(categoryService.GetCategories());
+                try
+                {
+                    Printer.Print(categoryService.GetCategories());
 
-                Console.WriteLine("Enter name of category: ");
-                string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+                    Console.WriteLine("Enter name of category: ");
+                    string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
 
-                categoryService.DeleteCategory(name);
+                    categoryService.DeleteCategory(name);
+                }
+                catch (Exception e) when (e is TooManyFalseAttemptsException
+                 || e is CategoryNameInvalidException)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
             else if (func.Equals("event"))
             {
-                Printer.Print(billService.GetBillsNames());
+                try
+                {
+                    Printer.Print(billService.GetBillsNames());
 
-                Console.WriteLine("Enter name of bill: ");
-                string billName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+                    Console.WriteLine("Enter name of bill: ");
+                    string billName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
 
-                Printer.Print(moneyEventService.GetEventNames(billName));
-                Console.WriteLine("Enter name of event: ");
-                string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+                    Printer.Print(moneyEventService.GetEventNames(billName));
 
-                moneyEventService.DeleteMoneyEvent(billName, name);
+                    Console.WriteLine("Enter name of event: ");
+                    string name = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+
+                    moneyEventService.DeleteMoneyEvent(billName, name);
+                }
+                catch (Exception e) when (e is TooManyFalseAttemptsException
+               || e is BillNameInvalidException)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
             else if (func.Equals(""))
             {
@@ -210,25 +234,42 @@ namespace PL
             }
             else if (func.Equals("category"))
             {
-                Printer.Print(categoryService.GetCategories());
+                try
+                {
+                    Printer.Print(categoryService.GetCategories());
 
-                Console.WriteLine("Enter name of category you want to change: : ");
-                string oldName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+                    Console.WriteLine("Enter name of category you want to change: : ");
+                    string oldName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
 
-                Console.WriteLine("Enter new name: ");
-                string newName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+                    Console.WriteLine("Enter new name: ");
+                    string newName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
 
-                categoryService.ChangeCategory(billService, oldName, newName);
+                    categoryService.ChangeCategory(billService, oldName, newName);
+                }
+                catch (Exception e) when (e is TooManyFalseAttemptsException
+                || e is CategoryNameInvalidException)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
-            //else if (func.Equals("event"))
-            //{
-            //    Printer.Print(billService.GetBillsNames());
+            else if (func.Equals("event"))
+            {
+                try
+                {
+                    Printer.Print(billService.GetBillsNames());
 
-            //    Console.WriteLine("Enter name of bill: ");
-            //    string billName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
+                    Console.WriteLine("Enter name of bill: ");
+                    string billName = inputService.GetVerifiedInput(@"[A-Za-z]{0,20}");
 
-            //    Printer.Print(moneyEventService.GetEventNames(billName));
-            //}
+                    Printer.Print(moneyEventService.GetEventNames(billName));
+                }
+                catch (Exception e) when (e is TooManyFalseAttemptsException
+                || e is BillNameInvalidException)
+                {
+                    Console.WriteLine(e.Message);
+                }
+
+            }
             else if (func.Equals(""))
             {
                 return;
@@ -288,7 +329,7 @@ namespace PL
         private string menuEntry = "\nWhat do you want to do?\n\"Add\"\n\"Delete\"\n\"Change\" info\nGenerate data \"stats\"\n\"Transfer\" money between bills\n";
         private string addMenu = "\nWhat do you want to add?\nBill\nProfit\nExpense\n";
         private string deleteMenu = "\nWhat do you want to delete?\nBill\nCategory\nEvent\n";
-        private string changeMenu = "\nWhat do you want to change?\nBill\nCategory\nProfit\nExpense\n";
+        private string changeMenu = "\nWhat do you want to change?\nBill\nCategory\nEvent\n";
         private string statsMenu = "\nWhat stats do you want to get?\nStats by date \"range\"\nStats by \"day\"\nStats by \"category\"\n";
     }
 }

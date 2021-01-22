@@ -38,6 +38,11 @@ namespace BLL
             }
         }
 
+        public void ChangeMoneyEvent(string billName, string moneyEvent)
+        {
+
+        }
+
         public MoneyEvent CreateNewMoneyEvent(bool expense, string name, string category, double money)
         {
             return new MoneyEvent(expense, name, category, money);
