@@ -19,9 +19,5 @@ namespace BLL
         public void TransferMoney(string fBill, string sBill, double ammount);
 
         public void ChangeCategories(string name, List<MoneyEvent> moneyEvents); 
-
-        public void GetMoneyInRange(Bill bill, DateTime startDate, DateTime endDate, out double profits, out double expenses);
-        public void GetMoneyByDate(Bill bill, DateTime date, out double profits, out double expenses);
-        //public void GetMoneyByCategory(Bill bill, string name, out double profits, out double expenses);
     }
 }
